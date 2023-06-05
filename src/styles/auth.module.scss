@@ -1,0 +1,116 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  background: whitesmoke;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.form {
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.h1 {
+  font-weight: 100;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.alert {
+  color: #bf1650;
+}
+
+.alert::before {
+  display: inline;
+  content: "⚠ ";
+}
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid white;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.label {
+  line-height: 2;
+  text-align: left;
+  display: block;
+  margin-bottom: 13px;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.button-submit {
+  background: #ec5990;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 16px;
+  font-weight: 100;
+  letter-spacing: 10px;
+  -webkit-appearance: none;
+  &:hover {
+    background: #bf1650;
+  }
+
+  &:active {
+    transition: 0.3s all;
+    transform: translateY(3px);
+    border: 1px solid transparent;
+    opacity: 0.8;
+  }
+}
+
+.button {
+  display: block;
+  appearance: none;
+  background: #333;
+  color: white;
+  border: none;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  &:active {
+    transition: 0.3s all;
+    transform: translateY(3px);
+    border: 1px solid transparent;
+    opacity: 0.8;
+  }
+  &:hover {
+    transition: 0.3s all;
+  }
+}
+
+// hr {
+//   margin-top: 30px;
+// }
+
+// button {
+// display: block;
+// appearance: none;
+// margin-top: 40px;
+// border: 1px solid #333;
+// margin-bottom: 20px;
+// text-transform: uppercase;
+// padding: 10px 20px;
+// border-radius: 4px;
+// }

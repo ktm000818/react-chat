@@ -1,0 +1,28 @@
+.container {
+  font-family: var(--font-sc-dream6);
+  background: linear-gradient(to bottom, transparent, rgb(185, 204, 243));
+  // width: 100%;
+  height: 100vh;
+}
+
+.title-wrapper {
+  position: relative;
+  top: 200px;
+  left: 400px;
+}
+
+.header {
+  width: 100vw;
+  height: 80px;
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: whitesmoke;
+}
+
+.title {
+  color: rgb(0, 0, 0);
+  font-size: 70px;
+  text-shadow: 1px 1px 1px gray;
+}
