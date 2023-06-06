@@ -1,12 +1,13 @@
 .container {
   font-family: var(--font-sc-dream6);
   background: linear-gradient(to bottom, transparent, rgb(185, 204, 243));
-  // width: 100%;
+  width: 1920px;
   height: 100vh;
+  position: relative;
 }
 
 .title-wrapper {
-  position: relative;
+  position: absolute;
   top: 200px;
   left: 400px;
 }
