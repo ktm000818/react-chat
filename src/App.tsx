@@ -5,6 +5,7 @@ import { auth } from "./firebaseModule";
 import LoginPage from "@components/LoginPage/LoginPage";
 import RegisterPage from "@components/RegisterPage/RegisterPage";
 import HomePage from "@components/HomePage/HomePage";
+import ChatPage from "./components/ChatPage/ChatPage";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -19,6 +20,10 @@ export default function App() {
     {
       path: "/register",
       element: <RegisterPage />,
+    },
+    {
+      path: "/chat",
+      element: <ChatPage />,
     },
   ]);
 
