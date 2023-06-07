@@ -2,12 +2,12 @@ import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseModule";
-import { loginState } from "@/recoil/recoil-store/store";
+import { loginUserState } from "@/recoil/recoil-store/store";
 
 export function useLogout() {
-  const setLoginState = useSetRecoilState(loginState);
+  const setLoginUserState = useSetRecoilState(loginUserState);
   const logout = async () => {
-    setLoginState(null);
+    setLoginUserState(null);
     signOut(auth)
       .then(() => {
         window.location.href = "/";
