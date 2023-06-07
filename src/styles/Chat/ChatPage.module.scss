@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+}
+
+.side-wrapper {
+  max-width: 350px;
+  min-width: 350px;
+}
+
+.main-wrapper {
+  width: 100%;
+}
+
+@import "../Environment/Environment.scss";
+
+@include mobile {
+  .side-wrapper {
+    display: none;
+  }
+}
+
+@include tablet {
+  .side-wrapper {
+    display: none;
+  }
+}
+
+@include desktop {
+}

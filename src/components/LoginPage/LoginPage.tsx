@@ -1,5 +1,5 @@
 import { auth } from "@/firebaseModule";
-import { loginState } from "@recoil/recoil-store/store";
+import { loginUserState } from "@recoil/recoil-store/store";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ export default function Page() {
   useLoginCheck();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const setLoginState = useSetRecoilState(loginState);
+  const setLoginState = useSetRecoilState(loginUserState);
   const {
     register,
     handleSubmit,

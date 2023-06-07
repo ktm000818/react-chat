@@ -1,0 +1,22 @@
+.container {
+  height: 100vh;
+}
+
+.header {
+  height: 10%;
+}
+
+.body {
+  background-color: whitesmoke;
+  color: black;
+  height: 90%;
+}
+
+.message-with-users-wrapper {
+  height: 90%;
+  display: flex;
+}
+
+.message-form-wrapper {
+  height: 10%;
+}

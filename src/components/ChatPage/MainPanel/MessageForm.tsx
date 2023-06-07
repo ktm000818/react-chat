@@ -3,9 +3,8 @@ function MessageForm() {
     <div
       style={{
         width: "100%",
-        height: "14%",
+        height: "100%",
         border: "1px solid black",
-        margin: "10px 0px 0px 0px",
       }}
     >
       MessagesForm

@@ -1,5 +1,5 @@
 import { useLogout } from "@/custom-hooks/useLogout";
-import { loginState } from "@/recoil/recoil-store/store";
+import { loginUserState } from "@/recoil/recoil-store/store";
 import styles from "@styles/MainNavigation.module.scss";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 
 export default function MainNavigation() {
   const navigate = useNavigate();
-  const userData = useRecoilValue(loginState);
+  const userData = useRecoilValue(loginUserState);
   const logout = useLogout();
   return (
     <div className={styles["container"]}>

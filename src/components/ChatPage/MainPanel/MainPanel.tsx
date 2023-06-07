@@ -1,20 +1,24 @@
 import Messages from "./Message";
 import MessageForm from "./MessageForm";
 import MessagesHeader from "./MessageHeader";
+import Users from "./Users";
+import styles from "@styles/Chat/Main/MainPanel.module.scss";
 
 function MainPanel() {
   return (
-    <div
-      style={{
-        backgroundColor: "whitesmoke",
-        padding: "2rem",
-        height: "100vh",
-        color: "black",
-      }}
-    >
-      <MessagesHeader />
-      <Messages />
-      <MessageForm />
+    <div className={styles["container"]}>
+      <div className={styles["header"]}>
+        <MessagesHeader />
+      </div>
+      <div className={styles["body"]}>
+        <div className={styles["message-with-users-wrapper"]}>
+          <Messages />
+          <Users />
+        </div>
+        <div className={styles["message-form-wrapper"]}>
+          <MessageForm />
+        </div>
+      </div>
     </div>
   );
 }

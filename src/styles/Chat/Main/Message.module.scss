@@ -1,0 +1,22 @@
+@import "../../Environment/Environment.scss";
+
+.container {
+  width: 100%;
+  border: 1px solid black;
+  height: 100%;
+}
+
+@include mobile {
+  .container {
+    width: 100%;
+  }
+}
+
+@include tablet {
+  .container {
+    width: 100%;
+  }
+}
+
+@include desktop {
+}
