@@ -3,8 +3,8 @@
 }
 
 .side-wrapper {
-  max-width: 350px;
-  min-width: 350px;
+  max-width: 250px;
+  min-width: 250px;
 }
 
 .main-wrapper {
@@ -21,7 +21,7 @@
 
 @include tablet {
   .side-wrapper {
-    display: none;
+    // display: none;
   }
 }
 
