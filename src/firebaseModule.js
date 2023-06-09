@@ -4,7 +4,9 @@ import "firebase/auth";
 import { getAuth } from "firebase/auth";
 import "firebase/database";
 import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 import "firebase/storage";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,13 +20,16 @@ const firebaseConfig = {
   messagingSenderId: "966375309261",
   appId: "1:966375309261:web:7a1fdb48d15e2c3f850e84",
   measurementId: "G-GX0V05DHR0",
-  databaseURL: "https://next-firebase-chat-b2121-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  databaseURL:
+    "https://next-firebase-chat-b2121-default-rtdb.asia-southeast1.firebasedatabase.app/",
 };
 
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
 const app = initializeApp(firebaseConfig);
 export const database = getDatabase(app);
+export const firestore = getFirestore(app);
+export const firestorage = getStorage(app);
 export const auth = getAuth(app);
 
 export default app;
