@@ -1,13 +1,18 @@
-import { firestore } from "@/firebaseModule";
-import { addDoc, collection } from "firebase/firestore";
+import { firestorage } from "@/firebaseModule";
+import { ref, uploadBytes } from "firebase/storage";
 
-const COLLECTION = "profile-image";
+const FOLDER_NAME = "profile-image";
 
-interface Doc {
+interface File {
   [name: string]: string;
 }
 
 //create docs
-export const addProfileImageToStore = async (value: Doc) => {
-  await addDoc(collection(firestore as any, COLLECTION), value);
+export const addProfileImageToStorage = async (file: any) => {
+  const storageRef = ref(firestorage, `${FOLDER_NAME}/${file.name}`);
+
+  const res = await uploadBytes(storageRef, file);
+  if (res.metadata.timeCreated) {
+    console.log("Uploaded a blob or file!");
+  }
 };

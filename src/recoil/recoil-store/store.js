@@ -8,6 +8,18 @@ export const loginUserState = atom({
   effects: [persistAtom],
 });
 
+export const isLoggedInSelector = selector({
+  key: "isLoggedInSelector",
+  get: ({ get }) => {
+    const user = get(loginUserState);
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+});
+
 export const userNameSelector = selector({
   key: "userName",
   get: ({ get }) => {
