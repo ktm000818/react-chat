@@ -1,6 +1,7 @@
 .container {
   font-family: var(--font-sc-dream6);
-  background: linear-gradient(to bottom, transparent, rgb(185, 204, 243));
+  background: url("../../public/background/homepage-background.png");
+  background-size: cover;
   width: 1920px;
   height: 100vh;
   position: relative;
@@ -19,11 +20,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: whitesmoke;
+  background-color: rgba(121, 121, 121, 0.5);
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 1px 2px black;
 }
 
 .title {
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-size: 70px;
-  text-shadow: 1px 1px 1px gray;
+  text-shadow: 5px 1px 5px rgb(0, 0, 0);
 }
