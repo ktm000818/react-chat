@@ -1,5 +1,5 @@
 import { auth } from "@/firebaseModule";
-import { loginUserState } from "@recoil/recoil-store/store";
+import { sessionState } from "@recoil/recoil-store/store";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ export default function Page() {
   useLoginCheck();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const setLoginState = useSetRecoilState(loginUserState);
+  const setSessionState = useSetRecoilState(sessionState);
   const {
     register,
     handleSubmit,
@@ -30,14 +30,18 @@ export default function Page() {
     try {
       setLoading(true);
       const { email, password } = data;
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const userData = userCredential.user;
       if (userData) {
-        setLoginState(userData);
+        setSessionState(userData);
         window.location.href = "/";
       }
     } catch (error: any) {
-      setLoginState(null);
+      setSessionState(null);
       console.error(error.message);
     } finally {
       setLoading(false);
@@ -49,14 +53,30 @@ export default function Page() {
       <form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={styles["h1"]}>Sign in</h1>
         <label className={styles["label"]}>Email</label>
-        <input type="email" className={styles["input"]} {...register("email", { required: true })} />
-        {errors.email && <span className={styles["alert"]}>This field is required</span>}
+        <input
+          type="email"
+          className={styles["input"]}
+          {...register("email", { required: true })}
+        />
+        {errors.email && (
+          <span className={styles["alert"]}>This field is required</span>
+        )}
 
         <label className={styles["label"]}>Password</label>
-        <input className={styles["input"]} type="password" {...register("password", { required: true })} />
-        {errors.password && <span className={styles["alert"]}>This field is required</span>}
+        <input
+          className={styles["input"]}
+          type="password"
+          {...register("password", { required: true })}
+        />
+        {errors.password && (
+          <span className={styles["alert"]}>This field is required</span>
+        )}
 
-        <Button className={styles["button-submit"]} type="submit" disabled={loading}>
+        <Button
+          className={styles["button-submit"]}
+          type="submit"
+          disabled={loading}
+        >
           SUBMIT
         </Button>
 

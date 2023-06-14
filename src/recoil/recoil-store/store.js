@@ -2,8 +2,8 @@ import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
-export const loginUserState = atom({
-  key: "loginUserState",
+export const sessionState = atom({
+  key: "sessionState",
   default: null,
   effects: [persistAtom],
 });
@@ -11,7 +11,7 @@ export const loginUserState = atom({
 export const isLoggedInSelector = selector({
   key: "isLoggedInSelector",
   get: ({ get }) => {
-    const user = get(loginUserState);
+    const user = get(sessionState);
     if (user) {
       return true;
     } else {
@@ -23,7 +23,7 @@ export const isLoggedInSelector = selector({
 export const userNameSelector = selector({
   key: "userName",
   get: ({ get }) => {
-    const user = get(loginUserState);
+    const user = get(sessionState);
     if (user) {
       return user.displayName;
     }
@@ -33,7 +33,7 @@ export const userNameSelector = selector({
 export const userImageSelector = selector({
   key: "userImage",
   get: ({ get }) => {
-    const user = get(loginUserState);
+    const user = get(sessionState);
     if (user) {
       return user.photoURL;
     }
