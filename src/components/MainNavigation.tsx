@@ -13,7 +13,9 @@ export default function MainNavigation() {
     <div className={styles["container"]}>
       {userData ? (
         <>
-          <span className={styles["nickname"]}>{userData?.displayName}님, 환영합니다. </span>
+          <span className={styles["nickname"]}>
+            <b>{userData?.displayName}님, 환영합니다. </b>
+          </span>
           <Button variant="primary" onClick={logout}>
             Sign out
           </Button>
