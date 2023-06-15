@@ -22,8 +22,8 @@ export const getAllChatRoomList = async () => {
   } catch (error) {
     return [];
   }
-
 }
+
 export const addChatRoom = async ({ roomName, description }: Props) => {
   const currentTime = new Date().toUTCString();
   const postListRef = ref(database, `${TABLE}/${roomName}`);
