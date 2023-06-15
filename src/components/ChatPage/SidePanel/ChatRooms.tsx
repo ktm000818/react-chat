@@ -1,9 +1,13 @@
 import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
-import { getAllChatRoomList } from "@/firebaseRTDB-actions/chatroom/actions";
+import { getAllChatRoomList } from "@/firebase-actions/chatroom/actions";
+import { chatRoomIdState } from "@/recoil/recoil-store/store";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 export default function ChatRooms() {
   const [data, setData] = useState<any[]>([]);
+  const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
+
   useEffect(() => {
     async function getChatrooms() {
       const rooms = await getAllChatRoomList();
@@ -12,6 +16,7 @@ export default function ChatRooms() {
 
     getChatrooms();
   }, []);
+
   return (
     <div style={{ margin: 10, border: "1px solid black" }}>
       <div
@@ -28,7 +33,11 @@ export default function ChatRooms() {
         {data &&
           data.length > 0 &&
           data.map((room: any) => {
-            return <h6>{room.roomName}</h6>;
+            return (
+              <div style={{ textDecoration: chatRoomId === room.roomId ? "underline" : "none" }} onClick={() => setChatRoomId(room.roomId)}>
+                <h6>{room.roomName}</h6>
+              </div>
+            );
           })}
       </div>
     </div>

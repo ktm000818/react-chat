@@ -2,9 +2,12 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { Props, addChatRoom } from "@/firebaseRTDB-actions/chatroom/actions";
+import { Props, addChatRoom } from "@/firebase-actions/chatroom/actions";
+import { useRecoilValue } from "recoil";
+import { sessionState } from "@/recoil/recoil-store/store";
 
 function CreateChatRoomModal() {
+  const user = useRecoilValue(sessionState);
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -17,9 +20,14 @@ function CreateChatRoomModal() {
     const data: Props = {
       roomName: roomName,
       description: description,
+      user: {
+        uid: user.uid,
+        name: user.displayName,
+        image: user.photoURL,
+      },
     };
-    const result = await addChatRoom(data);
-    console.log(result);
+    await addChatRoom(data);
+    alert("채팅방 생성 완료");
   };
 
   return (
@@ -36,21 +44,11 @@ function CreateChatRoomModal() {
           <Form>
             <Form.Group className="mb-3" controlId="formGroupEmail">
               <Form.Label>Room Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Room Name"
-                onChange={({ target }) => setRoomName(target.value)}
-              />
+              <Form.Control type="text" placeholder="Enter Room Name" onChange={({ target }) => setRoomName(target.value)} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={6}
-                type="text"
-                placeholder="description"
-                onChange={({ target }) => setDescription(target.value)}
-              />
+              <Form.Control as="textarea" rows={6} type="text" placeholder="description" onChange={({ target }) => setDescription(target.value)} />
             </Form.Group>
           </Form>
         </Modal.Body>
