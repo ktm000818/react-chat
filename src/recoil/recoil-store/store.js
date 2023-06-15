@@ -8,6 +8,12 @@ export const sessionState = atom({
   effects: [persistAtom],
 });
 
+export const chatRoomIdState = atom({
+  key: "chatRoomIdState",
+  default: null,
+  effects: [persistAtom],
+});
+
 export const isLoggedInSelector = selector({
   key: "isLoggedInSelector",
   get: ({ get }) => {
