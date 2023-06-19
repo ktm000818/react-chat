@@ -16,7 +16,10 @@ function Messages() {
     const chatArea = containerRef.current as HTMLDivElement;
     console.log(chatArea.clientHeight + chatArea.scrollTop);
     console.log(chatArea.scrollHeight);
-    if (Math.round(chatArea.clientHeight + chatArea.scrollTop) <= chatArea.scrollHeight) {
+    if (
+      Math.round(chatArea.clientHeight + chatArea.scrollTop) <=
+      chatArea.scrollHeight
+    ) {
       chatArea.scrollTo(0, chatArea.scrollHeight);
     }
   };
@@ -45,13 +48,45 @@ function Messages() {
         chatList.map((chat: any) => {
           return (
             <>
-              <div style={{ display: "flex", height: "auto", padding: "10px 0px 10px 5px" }}>
-                <div style={{ width: "70px", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: 50, borderRadius: 50, overflow: "hidden" }}>
-                    <img src={chat.image} alt="userPhoto" width={"100%"} height={"100%"} />
+              <div
+                style={{
+                  display: "flex",
+                  height: "auto",
+                  padding: "10px 0px 10px 5px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "70px",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 50,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      src={chat.image}
+                      alt="userPhoto"
+                      width={"100%"}
+                      height={"100%"}
+                    />
                   </div>
                 </div>
-                <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <div>
                     <h6 style={{ color: "whitesmoke" }}>{chat.name}</h6>
                   </div>

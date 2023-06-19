@@ -1,7 +1,9 @@
 import { Props, createMessage } from "@/firebase-actions/chatroom/chat/actions";
 import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
+import styles from "@styles/Chat/Main/MessageForm.module.scss";
+import { Form, InputGroup } from "react-bootstrap";
 
 function MessageForm() {
   const user = useRecoilValue(sessionState);
@@ -14,6 +16,10 @@ function MessageForm() {
   };
 
   const addMessage = () => {
+    if (!content) {
+      return false;
+    }
+
     const data: Props = {
       roomId,
       uid: user.uid,
@@ -22,18 +28,30 @@ function MessageForm() {
       image: user.photoURL,
     };
 
+    setContent("");
+
     createMessage(data);
   };
 
   const handleClickButton = () => {
     addMessage();
-    setContent("");
   };
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (!["Enter", "Shift"].includes(e.key)) {
+      return false;
+    }
+
+    if (e.nativeEvent.isComposing) {
+      return false;
+    }
+
+    if (e.shiftKey && e.key === "Enter") {
+      return false;
+    }
+
     if (e.key === "Enter") {
+      e.preventDefault();
       addMessage();
-      setContent("");
     }
   };
 
@@ -47,7 +65,18 @@ function MessageForm() {
       }}
     >
       <div>
-        <input type="text" value={content} onChange={handleChangeInput} onKeyDown={handleKeyDown} />
+        <InputGroup>
+          <InputGroup.Text>With textarea</InputGroup.Text>
+          <Form.Control
+            as="textarea"
+            aria-label="With textarea"
+            className={styles["custom-input"]}
+            type="text"
+            value={content}
+            onChange={handleChangeInput}
+            onKeyDown={handleKeyDown}
+          />
+        </InputGroup>
         <button onClick={handleClickButton}>전송</button>
       </div>
     </div>
