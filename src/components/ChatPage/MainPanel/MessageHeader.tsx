@@ -1,6 +1,9 @@
+import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
+import { chatRoomInfoState } from "@/recoil/recoil-store/store";
 
 function MessagesHeader() {
+  const chatRoomInfo = useRecoilValue(chatRoomInfoState);
   return (
     <div
       style={{
@@ -12,7 +15,7 @@ function MessagesHeader() {
         height: "100%",
       }}
     >
-      <div> Chat room Name </div>
+      <div> {chatRoomInfo.roomName} </div>
       <UserPanel />
     </div>
   );
