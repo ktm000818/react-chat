@@ -24,15 +24,28 @@ export const createMessage = async ({ roomId, uid, name, content, image }: Props
   });
 };
 
-export const getAllMessageList = async (roomId: string) => {
+export interface Message {
+  content: string;
+  image: string;
+  name: string;
+  timestamp: string;
+  uid: string;
+}
+
+interface Messages {
+  [name: string]: Message
+}
+
+export const getAllMessageList: (roomId: string) => Promise<Message[]> = async (roomId: string) => {
   try {
     const dbRef = ref(database);
-    const result = await get(child(dbRef, `${TABLE}/${roomId}`));
-    const resultVal = await result.val();
+    const messagesResult = await get(child(dbRef, `${TABLE}/${roomId}`));
+    const messagesResultVal: Messages = await messagesResult.val();
 
-    if (result.exists()) {
-      return Object.values(resultVal);
-    } else {
+    if (messagesResult.exists()) {
+        return Object.values(messagesResultVal);
+    }
+    else {
       return [];
     }
   } catch (error) {
