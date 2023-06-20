@@ -1,25 +1,41 @@
 import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
 import { getAllChatRoomList } from "@/firebase-actions/chatroom/actions";
 import {
+  addFavorite,
+  removeFavorite,
+} from "@/firebase-actions/chatroom/favorites/actions";
+import { database } from "@/firebaseModule";
+import {
   chatRoomIdState,
   chatRoomInfoState,
+  sessionState,
 } from "@/recoil/recoil-store/store";
+import { onChildAdded, onChildRemoved, ref } from "@firebase/database";
 import { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function ChatRooms() {
   const [data, setData] = useState<any[]>([]);
+  const user = useRecoilValue(sessionState);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
 
   useEffect(() => {
     async function getChatrooms() {
-      const rooms = await getAllChatRoomList();
+      const rooms = await getAllChatRoomList(user.uid);
       setData(rooms);
     }
 
     getChatrooms();
-  }, []);
+
+    const favoritesRef = ref(database, "favorites");
+    onChildAdded(favoritesRef, () => {
+      getChatrooms();
+    });
+    onChildRemoved(favoritesRef, (message) => {
+      getChatrooms();
+    });
+  }, [user.uid]);
 
   return (
     <div style={{ margin: 10, border: "1px solid black" }}>
@@ -52,6 +68,17 @@ export default function ChatRooms() {
                 }}
               >
                 <h6>{room.roomName}</h6>
+                <img
+                  src={room.isFavorite ? "filled_star.svg" : "star.svg"}
+                  alt="favorite"
+                  onClick={() => {
+                    if (room.isFavorite) {
+                      removeFavorite(room.roomId);
+                    } else {
+                      addFavorite(user.uid, room.roomId);
+                    }
+                  }}
+                />
               </div>
             );
           })}

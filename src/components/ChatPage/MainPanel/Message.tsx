@@ -1,6 +1,9 @@
-import { getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
+import {
+  Message,
+  getAllMessageList,
+} from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
-import { chatRoomIdState } from "@/recoil/recoil-store/store";
+import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/Main/Message.module.scss";
 import { onChildAdded, ref } from "firebase/database";
 import { useEffect, useRef, useState } from "react";
@@ -9,13 +12,12 @@ import { useRecoilValue } from "recoil";
 function Messages() {
   const containerRef = useRef<any>();
 
+  const user = useRecoilValue(sessionState);
   const roomId = useRecoilValue(chatRoomIdState);
-  const [chatList, setChatList] = useState<any[]>([]);
+  const [chatList, setChatList] = useState<Message[]>([]);
 
   const checkScrollBottom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
-    console.log(chatArea.clientHeight + chatArea.scrollTop);
-    console.log(chatArea.scrollHeight);
     if (
       Math.round(chatArea.clientHeight + chatArea.scrollTop) <=
       chatArea.scrollHeight
@@ -26,7 +28,7 @@ function Messages() {
 
   useEffect(() => {
     async function initMessages() {
-      const res = await getAllMessageList(roomId);
+      const res = await getAllMessageList(user.uid);
       setChatList(res);
     }
 

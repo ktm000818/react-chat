@@ -1,5 +1,9 @@
 import { addProfileImageToStorage } from "@/firebase-actions/upload/profile-image/actions";
-import { sessionState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
+import {
+  sessionState,
+  userImageSelector,
+  userNameSelector,
+} from "@/recoil/recoil-store/store";
 import { ChangeEvent, forwardRef, useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useRecoilCallback, useRecoilValue } from "recoil";
@@ -32,20 +36,28 @@ const ProfilePictureFileUpload = forwardRef((props, ref: any) => {
     };
   });
 
-  const handleChangeFile = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFile = async ({
+    target,
+  }: ChangeEvent<HTMLInputElement>) => {
     try {
       if (target.files && target.files.length > 0) {
         const file: any = target.files[0];
         const user = await addProfileImageToStorage(file);
         if (user && user.image) {
-          console.log(user);
           setSessionValue({ ...sessionValue, photoURL: user.image });
         }
       }
     } catch (error) {}
   };
 
-  return <input style={{ display: "none" }} type="file" ref={ref} onChange={handleChangeFile} />;
+  return (
+    <input
+      style={{ display: "none" }}
+      type="file"
+      ref={ref}
+      onChange={handleChangeFile}
+    />
+  );
 });
 
 const UserImage = forwardRef(({ onClick }: { onClick: any }, ref: any) => {
@@ -68,10 +80,15 @@ const UserImage = forwardRef(({ onClick }: { onClick: any }, ref: any) => {
 function UserImageWithModal({ fileUploaderRef }: any) {
   return (
     <>
-      <Dropdown drop="down-centered" style={{ height: "100%", cursor: "pointer" }}>
+      <Dropdown
+        drop="down-centered"
+        style={{ height: "100%", cursor: "pointer" }}
+      >
         <Dropdown.Toggle as={UserImage} id="s"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>프로필 사진 변경</Dropdown.Item>
+          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>
+            프로필 사진 변경
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </>
@@ -104,7 +121,9 @@ function NicknameWithModal({ fileUploaderRef }: any) {
       <Dropdown align={"end"} style={{ height: "100%", cursor: "pointer" }}>
         <Dropdown.Toggle as={Nickname} id="test"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>설정</Dropdown.Item>
+          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>
+            설정
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </>
