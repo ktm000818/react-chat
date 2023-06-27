@@ -1,5 +1,5 @@
 import { database } from "@/firebaseModule";
-import { child, get, ref, set } from "firebase/database";
+import { child, get, orderByChild, query, ref, set } from "firebase/database";
 import { Favorite, getFavoritesByUID } from "./favorites/actions";
 
 export interface Props {
@@ -12,13 +12,14 @@ export interface Props {
   };
 }
 
-const TABLE = "chatroom";
+const CHATROOM = "chatroom";
+const USER_CHATROOM = "user_chatroom";
 
 interface Member {
-    image: string;
-    name: string;
-    superPermission: boolean;
-    uid: string
+  image: string;
+  name: string;
+  superPermission: boolean;
+  uid: string;
 }
 
 interface Members {
@@ -31,45 +32,29 @@ interface ChatRoom extends Favorite {
   members: Members;
   roomId: string;
   roomName: string;
-  isFavorite?: true;
 }
 
 interface ChatRoomList {
   [name: string]: ChatRoom;
 }
 
-export const getAllChatRoomList: (uid: string) => Promise<ChatRoom[]> = async (uid) => {
+export const getAllChatRoomListByUID: (
+  uid: string
+) => Promise<ChatRoom[]> = async (uid) => {
   try {
     const dbRef = ref(database);
-    const QueriedChatRoomList = await get(child(dbRef, `${TABLE}`));
+    const queryChatRoomOrderByCreatedAt = query(
+      child(dbRef, `${USER_CHATROOM}/${uid}`),
+      orderByChild("createdAt")
+    );
+    const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
-    const favoritesList = await getFavoritesByUID(uid);
-    let chatRoomListValCopy = Object.assign({}, chatRoomListVal);
-    let result: ChatRoom[] = Object.values(chatRoomListValCopy);
+
+    console.log(chatRoomListVal);
 
     if (QueriedChatRoomList.exists()) {
-      if(favoritesList){
-        let _favoritesList = [...favoritesList];
-        
-        while(_favoritesList.length > 0){
-          let favorite = _favoritesList.pop();
-          
-          if(!favorite){
-            break;
-          }else{
-            for(let chatRoom in chatRoomListValCopy){
-              if(chatRoomListValCopy[chatRoom].roomId === favorite.roomId){
-                chatRoomListValCopy[chatRoom].isFavorite = true;
-              }
-            }
-          }
-        }
-
-        return result;
-      }else{
-        return result;
-      }
-    }else{
+      return Object.values(chatRoomListVal);
+    } else {
       return [];
     }
   } catch (error) {
@@ -78,9 +63,9 @@ export const getAllChatRoomList: (uid: string) => Promise<ChatRoom[]> = async (u
 };
 
 export const addChatRoom = async ({ user, roomName, description }: Props) => {
-  const currentTime = new Date().toUTCString();
-  const roomListRef = ref(database, `${TABLE}/${roomName}`);
-  await set(roomListRef, {
+  const currentTime = new Date().getTime();
+  const NEW_ROOM_ID = window.crypto.randomUUID();
+  const defaultRoomInfo = {
     roomName,
     description,
     createdAt: currentTime,
@@ -93,6 +78,16 @@ export const addChatRoom = async ({ user, roomName, description }: Props) => {
         superPermission: true,
       },
     },
-    roomId: window.crypto.randomUUID(),
-  });
+    roomId: NEW_ROOM_ID,
+  };
+  const userRoomInfo = { ...defaultRoomInfo, isSuper: true };
+
+  const roomListRef = ref(database, `${CHATROOM}/${NEW_ROOM_ID}`);
+  const userRoomListRef = ref(
+    database,
+    `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`
+  );
+
+  await set(roomListRef, defaultRoomInfo);
+  await set(userRoomListRef, userRoomInfo);
 };

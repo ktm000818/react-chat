@@ -10,18 +10,18 @@ export const sessionState = atom<any>({
 
 export const chatRoomIdState = atom<string>({
   key: "chatRoomIdState",
-  default: '',
+  default: "",
   effects: [persistAtom],
 });
 
 interface ChatRoomInfo {
-roomId : string,
-roomName : string
+  roomId: string;
+  roomName: string;
 }
 
 export const chatRoomInfoState = atom<ChatRoomInfo>({
   key: "chatRoomInfoState",
-  default: {roomId: "", roomName: ""},
+  default: { roomId: "", roomName: "" },
   effects: [persistAtom],
 });
 
@@ -43,7 +43,7 @@ export const userNameSelector = selector<string | null>({
     const user = get(sessionState);
     if (user) {
       return user.displayName;
-    }else{
+    } else {
       return null;
     }
   },
@@ -55,8 +55,8 @@ export const userImageSelector = selector<string>({
     const user = get(sessionState);
     if (user) {
       return user.photoURL;
-    }else{
-      return '';
+    } else {
+      return "";
     }
   },
 });
