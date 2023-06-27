@@ -3,7 +3,7 @@ import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
 import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styles from "@styles/Chat/Main/MessageForm.module.scss";
-import { Form, InputGroup } from "react-bootstrap";
+import { Button, Form, InputGroup } from "react-bootstrap";
 
 function MessageForm() {
   const user = useRecoilValue(sessionState);
@@ -64,11 +64,10 @@ function MessageForm() {
         alignItems: "center",
       }}
     >
-      <div>
+      <div style={{ display: "flex", width: "80%" }}>
         <InputGroup>
-          <InputGroup.Text>With textarea</InputGroup.Text>
           <Form.Control
-            as="textarea"
+            as="input"
             aria-label="With textarea"
             className={styles["custom-input"]}
             type="text"
@@ -76,8 +75,8 @@ function MessageForm() {
             onChange={handleChangeInput}
             onKeyDown={handleKeyDown}
           />
+          <Button onClick={handleClickButton}>전송</Button>
         </InputGroup>
-        <button onClick={handleClickButton}>전송</button>
       </div>
     </div>
   );

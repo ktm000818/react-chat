@@ -1,9 +1,19 @@
 .custom-input {
-  background-color: rgba(0, 0, 0, 0.586);
+  // display: flex;
+  background-color: rgba(0, 0, 0, 0.586) !important;
   border: none;
-  color: white;
+  color: white !important;
+
+  &.form-control {
+    border: none;
+  }
 
   &:hover {
     border: none;
+  }
+
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.586) !important;
+    color: white !important;
   }
 }
