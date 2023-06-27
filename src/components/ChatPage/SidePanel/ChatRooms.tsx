@@ -1,15 +1,8 @@
 import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
 import { getAllChatRoomList } from "@/firebase-actions/chatroom/actions";
-import {
-  addFavorite,
-  removeFavorite,
-} from "@/firebase-actions/chatroom/favorites/actions";
+import { addFavorite, removeFavorite } from "@/firebase-actions/chatroom/favorites/actions";
 import { database } from "@/firebaseModule";
-import {
-  chatRoomIdState,
-  chatRoomInfoState,
-  sessionState,
-} from "@/recoil/recoil-store/store";
+import { chatRoomIdState, chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
 import { onChildAdded, onChildRemoved, ref } from "@firebase/database";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -26,13 +19,20 @@ export default function ChatRooms() {
       setData(rooms);
     }
 
-    getChatrooms();
-
     const favoritesRef = ref(database, "favorites");
+    const chatRoomsRef = ref(database, "chatroom");
+
     onChildAdded(favoritesRef, () => {
       getChatrooms();
     });
-    onChildRemoved(favoritesRef, (message) => {
+    onChildRemoved(favoritesRef, () => {
+      getChatrooms();
+    });
+
+    onChildAdded(chatRoomsRef, () => {
+      getChatrooms();
+    });
+    onChildRemoved(chatRoomsRef, () => {
       getChatrooms();
     });
   }, [user.uid]);
@@ -52,12 +52,12 @@ export default function ChatRooms() {
       <div style={{ display: "flex", flexDirection: "column" }}>
         {data &&
           data.length > 0 &&
-          data.map((room: any) => {
+          data.map((room: any, index) => {
             return (
               <div
+                key={index + "rooms"}
                 style={{
-                  textDecoration:
-                    chatRoomId === room.roomId ? "underline" : "none",
+                  textDecoration: chatRoomId === room.roomId ? "underline" : "none",
                 }}
                 onClick={() => {
                   setChatRoomId(room.roomId);
