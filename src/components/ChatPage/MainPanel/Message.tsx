@@ -1,12 +1,9 @@
-import {
-  Message,
-  getAllMessageList,
-} from "@/firebase-actions/chatroom/chat/actions";
+import React, { useEffect, useRef, useState } from "react";
+import { Message, getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/Main/Message.module.scss";
 import { onChildAdded, ref } from "firebase/database";
-import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 function Messages() {
@@ -18,17 +15,14 @@ function Messages() {
 
   const checkScrollBottom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
-    if (
-      Math.round(chatArea.clientHeight + chatArea.scrollTop) <=
-      chatArea.scrollHeight
-    ) {
+    if (Math.round(chatArea.clientHeight + chatArea.scrollTop) <= chatArea.scrollHeight) {
       chatArea.scrollTo(0, chatArea.scrollHeight);
     }
   };
 
   useEffect(() => {
     async function initMessages() {
-      const res = await getAllMessageList(user.uid);
+      const res = await getAllMessageList(roomId);
       setChatList(res);
     }
 
@@ -38,7 +32,7 @@ function Messages() {
     onChildAdded(messagesRef, (message) => {
       initMessages();
     });
-  }, [roomId]);
+  }, [roomId, user.uid]);
 
   useEffect(() => {
     checkScrollBottom();
@@ -47,9 +41,9 @@ function Messages() {
   return (
     <div className={styles["container"]} ref={containerRef}>
       {chatList.length > 0 &&
-        chatList.map((chat: any) => {
+        chatList.map((chat: any, index) => {
           return (
-            <>
+            <React.Fragment key={index + "messages"}>
               <div
                 style={{
                   display: "flex",
@@ -74,12 +68,7 @@ function Messages() {
                       overflow: "hidden",
                     }}
                   >
-                    <img
-                      src={chat.image}
-                      alt="userPhoto"
-                      width={"100%"}
-                      height={"100%"}
-                    />
+                    <img src={chat.image} alt="userPhoto" width={"100%"} height={"100%"} />
                   </div>
                 </div>
                 <div
@@ -98,7 +87,7 @@ function Messages() {
                 </div>
               </div>
               <hr style={{ padding: 0, marginBottom: 0, marginTop: 0 }} />
-            </>
+            </React.Fragment>
           );
         })}
     </div>

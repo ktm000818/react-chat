@@ -33,7 +33,7 @@ export interface Message {
 }
 
 interface Messages {
-  [name: string]: Message
+  [name: string]: Message;
 }
 
 export const getAllMessageList: (roomId: string) => Promise<Message[]> = async (roomId: string) => {
@@ -43,9 +43,8 @@ export const getAllMessageList: (roomId: string) => Promise<Message[]> = async (
     const messagesResultVal: Messages = await messagesResult.val();
 
     if (messagesResult.exists()) {
-        return Object.values(messagesResultVal);
-    }
-    else {
+      return Object.values(messagesResultVal);
+    } else {
       return [];
     }
   } catch (error) {
