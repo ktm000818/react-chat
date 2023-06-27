@@ -16,7 +16,7 @@ function CreateChatRoomModal() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleClickSubmit = async () => {
+  const handleClickAdd = async () => {
     const data: Props = {
       roomName: roomName,
       description: description,
@@ -27,7 +27,9 @@ function CreateChatRoomModal() {
       },
     };
     await addChatRoom(data);
-    alert("채팅방 생성 완료");
+
+    alert("채팅방 생성 완료!");
+    handleClose();
   };
 
   return (
@@ -56,7 +58,7 @@ function CreateChatRoomModal() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClickSubmit}>
+          <Button variant="primary" onClick={handleClickAdd}>
             Save Changes
           </Button>
         </Modal.Footer>
