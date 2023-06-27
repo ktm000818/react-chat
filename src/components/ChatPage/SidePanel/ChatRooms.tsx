@@ -1,8 +1,11 @@
 import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
-import { getAllChatRoomList } from "@/firebase-actions/chatroom/actions";
-import { addFavorite, removeFavorite } from "@/firebase-actions/chatroom/favorites/actions";
+import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
-import { chatRoomIdState, chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
+import {
+  chatRoomIdState,
+  chatRoomInfoState,
+  sessionState,
+} from "@/recoil/recoil-store/store";
 import { onChildAdded, onChildRemoved, ref } from "@firebase/database";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -15,19 +18,11 @@ export default function ChatRooms() {
 
   useEffect(() => {
     async function getChatrooms() {
-      const rooms = await getAllChatRoomList(user.uid);
+      const rooms = await getAllChatRoomListByUID(user.uid);
       setData(rooms);
     }
 
-    const favoritesRef = ref(database, "favorites");
-    const chatRoomsRef = ref(database, "chatroom");
-
-    onChildAdded(favoritesRef, () => {
-      getChatrooms();
-    });
-    onChildRemoved(favoritesRef, () => {
-      getChatrooms();
-    });
+    const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
 
     onChildAdded(chatRoomsRef, () => {
       getChatrooms();
@@ -57,7 +52,8 @@ export default function ChatRooms() {
               <div
                 key={index + "rooms"}
                 style={{
-                  textDecoration: chatRoomId === room.roomId ? "underline" : "none",
+                  textDecoration:
+                    chatRoomId === room.roomId ? "underline" : "none",
                 }}
                 onClick={() => {
                   setChatRoomId(room.roomId);
@@ -68,17 +64,6 @@ export default function ChatRooms() {
                 }}
               >
                 <h6>{room.roomName}</h6>
-                <img
-                  src={room.isFavorite ? "filled_star.svg" : "star.svg"}
-                  alt="favorite"
-                  onClick={() => {
-                    if (room.isFavorite) {
-                      removeFavorite(room.roomId);
-                    } else {
-                      addFavorite(user.uid, room.roomId);
-                    }
-                  }}
-                />
               </div>
             );
           })}
