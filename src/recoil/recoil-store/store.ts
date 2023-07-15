@@ -2,6 +2,11 @@ import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
+interface ChatRoomInfo {
+  roomId: string;
+  roomName: string;
+}
+
 export const sessionState = atom<any>({
   key: "sessionState",
   default: null,
@@ -14,16 +19,22 @@ export const chatRoomIdState = atom<string>({
   effects: [persistAtom],
 });
 
-interface ChatRoomInfo {
-  roomId: string;
-  roomName: string;
-}
 
 export const chatRoomInfoState = atom<ChatRoomInfo>({
   key: "chatRoomInfoState",
   default: { roomId: "", roomName: "" },
   effects: [persistAtom],
 });
+
+export const chatRoomListState = atom<any[]>({
+  key: "chatRoomListState",
+  default: [],
+})
+
+export const favoritesListState = atom<any[]>({
+  key: "favoritesListState",
+  default: [],
+})
 
 export const isLoggedInSelector = selector<boolean>({
   key: "isLoggedInSelector",
