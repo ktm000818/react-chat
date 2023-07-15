@@ -1,36 +1,35 @@
 import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
 import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
-import {
-  chatRoomIdState,
-  chatRoomInfoState,
-  sessionState,
-} from "@/recoil/recoil-store/store";
-import { onChildAdded, onChildRemoved, ref } from "@firebase/database";
-import { useEffect, useState } from "react";
+import { chatRoomIdState, chatRoomInfoState, chatRoomListState, sessionState } from "@/recoil/recoil-store/store";
+import { onChildAdded, onChildChanged, onChildRemoved, ref } from "@firebase/database";
+import { useCallback, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function ChatRooms() {
-  const [data, setData] = useState<any[]>([]);
+  const [chatRooms, setChatRooms] = useRecoilState(chatRoomListState);
   const user = useRecoilValue(sessionState);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
 
+  const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
+
+  const getAndSetChatRooms = useCallback(async () => {
+    const rooms = await getAllChatRoomListByUID(user.uid);
+    setChatRooms(rooms);
+  }, [user.uid, setChatRooms]);
+
   useEffect(() => {
-    async function getChatrooms() {
-      const rooms = await getAllChatRoomListByUID(user.uid);
-      setData(rooms);
-    }
-
-    const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
-
     onChildAdded(chatRoomsRef, () => {
-      getChatrooms();
+      getAndSetChatRooms();
     });
     onChildRemoved(chatRoomsRef, () => {
-      getChatrooms();
+      getAndSetChatRooms();
     });
-  }, [user.uid]);
+    onChildChanged(chatRoomsRef, () => {
+      getAndSetChatRooms();
+    });
+  }, [getAndSetChatRooms, chatRoomsRef]);
 
   return (
     <div style={{ margin: 10, border: "1px solid black" }}>
@@ -45,15 +44,13 @@ export default function ChatRooms() {
         <CreateChatRoomModal />
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {data &&
-          data.length > 0 &&
-          data.map((room: any, index) => {
+        {chatRooms &&
+          chatRooms.map((room: any, index: any) => {
             return (
               <div
                 key={index + "rooms"}
                 style={{
-                  textDecoration:
-                    chatRoomId === room.roomId ? "underline" : "none",
+                  textDecoration: chatRoomId === room.roomId ? "underline" : "none",
                 }}
                 onClick={() => {
                   setChatRoomId(room.roomId);
