@@ -1,15 +1,8 @@
+import { addFavorite, getIsFavoriteByRoomId, removeFavorite } from "@/firebase-actions/chatroom/favorites/actions";
+import { chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
-import { chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
-import { database } from "@/firebaseModule";
-import { onChildAdded, onChildRemoved, ref } from "firebase/database";
-import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
-import {
-  addFavorite,
-  getIsFavoriteByRoomId,
-  removeFavorite,
-} from "@/firebase-actions/chatroom/favorites/actions";
-import { useEffect, useState } from "react";
 
 function MessagesHeader() {
   const user = useRecoilValue(sessionState);
@@ -17,24 +10,16 @@ function MessagesHeader() {
 
   const [isFavorite, setIsFavorite] = useState<any>(null);
 
+  const getAndSetIsFavoriteRoom = useCallback(async () => {
+    const isFavorite = await getIsFavoriteByRoomId(user.uid, chatRoomInfo.roomId);
+
+    setIsFavorite(isFavorite);
+  }, [chatRoomInfo.roomId, user.uid]);
+
   useEffect(() => {
-    async function getIsFavorite() {
-      const isFavorite = await getIsFavoriteByRoomId(
-        user.uid,
-        chatRoomInfo.roomId
-      );
-      setIsFavorite(isFavorite);
-    }
+    getAndSetIsFavoriteRoom();
+  }, [getAndSetIsFavoriteRoom]);
 
-    const userFavoritesRef = ref(database, `user_favorites/${user.uid}`);
-
-    onChildAdded(userFavoritesRef, () => {
-      getIsFavorite();
-    });
-    onChildRemoved(userFavoritesRef, () => {
-      getIsFavorite();
-    });
-  }, [chatRoomInfo.roomId]);
   return (
     <div
       style={{
@@ -46,16 +31,18 @@ function MessagesHeader() {
         height: "100%",
       }}
     >
-      <div>
-        <h5>{chatRoomInfo.roomName}</h5>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <span style={{ fontSize: "1.5rem", marginRight: "10px" }}>{chatRoomInfo.roomName}</span>
         <img
           src={isFavorite ? "filled_star.svg" : "star.svg"}
           alt="favorite"
           onClick={() => {
             if (isFavorite) {
               removeFavorite(user.uid, chatRoomInfo.roomId);
+              setIsFavorite(false);
             } else {
               addFavorite(user.uid, chatRoomInfo);
+              setIsFavorite(true);
             }
           }}
         />
