@@ -1,6 +1,9 @@
 import { database } from "@/firebaseModule";
-import { child, get, orderByChild, query, ref, set } from "firebase/database";
+import { child, equalTo, get, orderByChild, query, ref, set } from "firebase/database";
 import { Favorite, getFavoritesByUID } from "./favorites/actions";
+
+const CHATROOM = "chatroom";
+const USER_CHATROOM = "user_chatroom";
 
 export interface Props {
   roomName: string;
@@ -11,9 +14,6 @@ export interface Props {
     uid: string;
   };
 }
-
-const CHATROOM = "chatroom";
-const USER_CHATROOM = "user_chatroom";
 
 interface Member {
   image: string;
@@ -38,19 +38,11 @@ interface ChatRoomList {
   [name: string]: ChatRoom;
 }
 
-export const getAllChatRoomListByUID: (
-  uid: string
-) => Promise<ChatRoom[]> = async (uid) => {
+export const getAllChatRoomListByUID: (uid: string) => Promise<ChatRoom[]> = async (uid) => {
   try {
-    const dbRef = ref(database);
-    const queryChatRoomOrderByCreatedAt = query(
-      child(dbRef, `${USER_CHATROOM}/${uid}`),
-      orderByChild("createdAt")
-    );
+    const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
-
-    console.log(chatRoomListVal);
 
     if (QueriedChatRoomList.exists()) {
       return Object.values(chatRoomListVal);
@@ -79,14 +71,12 @@ export const addChatRoom = async ({ user, roomName, description }: Props) => {
       },
     },
     roomId: NEW_ROOM_ID,
+    isFavorite: false,
   };
   const userRoomInfo = { ...defaultRoomInfo, isSuper: true };
 
   const roomListRef = ref(database, `${CHATROOM}/${NEW_ROOM_ID}`);
-  const userRoomListRef = ref(
-    database,
-    `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`
-  );
+  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`);
 
   await set(roomListRef, defaultRoomInfo);
   await set(userRoomListRef, userRoomInfo);
