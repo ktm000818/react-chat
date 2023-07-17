@@ -29,7 +29,8 @@ export default function ChatRooms() {
     onChildChanged(chatRoomsRef, () => {
       getAndSetChatRooms();
     });
-  }, [getAndSetChatRooms, chatRoomsRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div style={{ margin: 10, border: "1px solid black" }}>

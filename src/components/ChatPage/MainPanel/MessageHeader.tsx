@@ -12,13 +12,13 @@ function MessagesHeader() {
 
   const getAndSetIsFavoriteRoom = useCallback(async () => {
     const isFavorite = await getIsFavoriteByRoomId(user.uid, chatRoomInfo.roomId);
-
     setIsFavorite(isFavorite);
   }, [chatRoomInfo.roomId, user.uid]);
 
   useEffect(() => {
     getAndSetIsFavoriteRoom();
-  }, [getAndSetIsFavoriteRoom]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div

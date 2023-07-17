@@ -24,7 +24,8 @@ export default function Favorited() {
     onChildRemoved(userFavoritesRef, () => {
       getAndSetFavorites();
     });
-  }, [getAndSetFavorites, userFavoritesRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
