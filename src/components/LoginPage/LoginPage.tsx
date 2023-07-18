@@ -1,4 +1,4 @@
-import { auth } from "@/firebaseModule";
+import { auth, database } from "@/firebaseModule";
 import { sessionState } from "@recoil/recoil-store/store";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
@@ -8,6 +8,7 @@ import styles from "@styles/auth.module.scss";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import useLoginCheck from "@/custom-hooks/useLoginCheck";
+import { ref, set, update } from "@firebase/database";
 
 interface FormValues {
   email: string;
@@ -22,21 +23,25 @@ export default function Page() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormValues>();
+
+  const updateUserLoginState = async (uid: string) => {
+    const dbRef = ref(database);
+    const updates: any = {};
+    updates[`users/${uid}/isLogin`] = true;
+    await update(dbRef, updates);
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setLoading(true);
       const { email, password } = data;
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
+
       if (userData) {
+        updateUserLoginState(userData.uid);
         setSessionState(userData);
         window.location.href = "/";
       }
@@ -53,30 +58,14 @@ export default function Page() {
       <form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={styles["h1"]}>Sign in</h1>
         <label className={styles["label"]}>Email</label>
-        <input
-          type="email"
-          className={styles["input"]}
-          {...register("email", { required: true })}
-        />
-        {errors.email && (
-          <span className={styles["alert"]}>This field is required</span>
-        )}
+        <input type="email" className={styles["input"]} {...register("email", { required: true })} />
+        {errors.email && <span className={styles["alert"]}>This field is required</span>}
 
         <label className={styles["label"]}>Password</label>
-        <input
-          className={styles["input"]}
-          type="password"
-          {...register("password", { required: true })}
-        />
-        {errors.password && (
-          <span className={styles["alert"]}>This field is required</span>
-        )}
+        <input className={styles["input"]} type="password" {...register("password", { required: true })} />
+        {errors.password && <span className={styles["alert"]}>This field is required</span>}
 
-        <Button
-          className={styles["button-submit"]}
-          type="submit"
-          disabled={loading}
-        >
+        <Button className={styles["button-submit"]} type="submit" disabled={loading}>
           SUBMIT
         </Button>
 

@@ -1,15 +1,20 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth } from "@/firebaseModule";
+import { auth, database } from "@/firebaseModule";
 import { sessionState } from "@/recoil/recoil-store/store";
+import { ref, update } from "@firebase/database";
 
 export function useLogout() {
-  const setSessionState = useSetRecoilState(sessionState);
+  const [session, setSession] = useRecoilState(sessionState);
   const logout = async () => {
-    setSessionState(null);
     signOut(auth)
-      .then(() => {
+      .then(async () => {
+        const dbRef = ref(database);
+        const updates: any = {};
+        updates[`users/${session.uid}/isLogin`] = false;
+        await update(dbRef, updates);
+        setSession(null);
         window.location.href = "/";
       })
       .catch((error) => {

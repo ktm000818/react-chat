@@ -42,6 +42,7 @@ export default function RegisterPage() {
       set(ref(database, "users/" + createdUser.user.uid), {
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
+        isLogin: false,
       });
 
       navigate("/login");
