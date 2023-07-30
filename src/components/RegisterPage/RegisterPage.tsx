@@ -1,7 +1,5 @@
-"use client";
-
 import { auth, database } from "../../firebaseModule";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { UserCredential, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, set } from "firebase/database";
 import { useRef, useState } from "react";
 import { Button } from "react-bootstrap";
@@ -28,23 +26,16 @@ export default function RegisterPage() {
     watch,
     formState: { errors },
   } = useForm<FormValues>();
+  const password = useRef("");
+  password.current = watch("password");
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setLoading(true);
-      const { email, password, nickname, passwordConfirm } = data;
+      const { email, password } = data;
       const createdUser = await createUserWithEmailAndPassword(auth, email, password);
-
-      await updateProfile(auth.currentUser as any, {
-        displayName: nickname,
-        photoURL: `http://gravatar.com/avatar/${Md5.hashStr(createdUser.user.email as string)}?d=identicon`,
-      });
-
-      set(ref(database, "users/" + createdUser.user.uid), {
-        name: createdUser.user.displayName,
-        image: createdUser.user.photoURL,
-        isLogin: false,
-      });
-
+      await updateUserProfile(data);
+      await setUserOnDB(createdUser);
       navigate("/login");
     } catch (error: any) {
       console.error(error.message);
@@ -53,27 +44,38 @@ export default function RegisterPage() {
     }
   };
 
-  const password = useRef("");
-  password.current = watch("password");
+  const updateUserProfile = async (data: FormValues) => {
+    await updateProfile(auth.currentUser as any, {
+      displayName: data.nickname,
+      photoURL: `http://gravatar.com/avatar/${Md5.hashStr(data.email as string)}?d=identicon`,
+    });
+  };
+
+  const setUserOnDB = async (createdUser: UserCredential) => {
+    set(ref(database, "users/" + createdUser.user.uid), {
+      name: createdUser.user.displayName,
+      image: createdUser.user.photoURL,
+      isLogin: false,
+    });
+  };
 
   return (
     <div className={styles["container"]}>
-      {/* /* "handleSubmit" will validate your inputs before invoking "onSubmit"  */}
       <form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
-        {/* register your input into the hook by invoking the "register" function */}
         <h1 className={styles["h1"]}>Sign up</h1>
         <label className={styles["label"]}>Email</label>
         <input type="email" className={styles["input"]} {...register("email", { required: true })} />
         {errors.email && <span className={styles["alert"]}>This field is required</span>}
+
         <label className={styles["label"]}>Nickname</label>
         <input className={styles["input"]} {...register("nickname", { required: true })} />
         {errors.nickname && <span className={styles["alert"]}>This field is required</span>}
-        {/* include validation with required or other standard HTML validation rules */}
+
         <label className={styles["label"]}>Password</label>
         <input className={styles["input"]} type="password" {...register("password", { required: true, minLength: 6 })} />
-        {/* errors will return when field validation fails  */}
         {errors.password && errors.password.type === "required" && <span className={styles["alert"]}>This field is required</span>}
         {errors.password && errors.password.type === "minLength" && <span className={styles["alert"]}>password should be 6 characters at least.</span>}
+
         <label className={styles["label"]}>Password Confirm</label>
         <input
           className={styles["input"]}
@@ -83,7 +85,6 @@ export default function RegisterPage() {
             validate: (value) => value === password.current,
           })}
         />
-        {/* errors will return when field validation fails  */}
         {errors.passwordConfirm && errors.passwordConfirm.type === "required" && <span className={styles["alert"]}>This field is required</span>}
         {errors.passwordConfirm && errors.passwordConfirm.type === "validate" && <span className={styles["alert"]}>wrong password. check again.</span>}
 
