@@ -88,7 +88,10 @@ interface Favorites {
   [key: string]: Favorite;
 }
 
-export const getFavoritesByUID: (uid: string) => Promise<Favorite[]> = async (uid) => {
+export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[]> = async (uid) => {
+  if (!uid) {
+    return [];
+  }
   try {
     const dbRef = ref(database);
     const result = await get(child(dbRef, `${USER_FAVORITES}/${uid}`));
