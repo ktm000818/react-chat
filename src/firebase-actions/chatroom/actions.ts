@@ -1,6 +1,6 @@
 import { database } from "@/firebaseModule";
-import { child, equalTo, get, orderByChild, query, ref, set } from "firebase/database";
-import { Favorite, getFavoritesByUID } from "./favorites/actions";
+import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
+import { Favorite } from "./favorites/actions";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
@@ -38,7 +38,10 @@ interface ChatRoomList {
   [name: string]: ChatRoom;
 }
 
-export const getAllChatRoomListByUID: (uid: string) => Promise<ChatRoom[]> = async (uid) => {
+export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatRoom[]> = async (uid) => {
+  if (!uid) {
+    return [];
+  }
   try {
     const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
