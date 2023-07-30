@@ -8,16 +8,22 @@ import { useRecoilValue } from "recoil";
 
 function Messages() {
   const containerRef = useRef<any>();
-
   const user = useRecoilValue(sessionState);
   const roomId = useRecoilValue(chatRoomIdState);
   const [chatList, setChatList] = useState<Message[]>([]);
 
-  const checkScrollBottom = () => {
+  const checkIsScrollButtom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
     if (Math.round(chatArea.clientHeight + chatArea.scrollTop) <= chatArea.scrollHeight) {
-      chatArea.scrollTo(0, chatArea.scrollHeight);
+      return false;
+    } else {
+      return true;
     }
+  };
+
+  const moveScrollBottom = () => {
+    const chatArea = containerRef.current as HTMLDivElement;
+    chatArea.scrollTo(0, chatArea.scrollHeight);
   };
 
   useEffect(() => {
@@ -25,17 +31,16 @@ function Messages() {
       const res = await getAllMessageList(roomId);
       setChatList(res);
     }
-
-    initMessages();
-
     const messagesRef = ref(database, "chat/" + roomId);
-    onChildAdded(messagesRef, (message) => {
+    onChildAdded(messagesRef, () => {
       initMessages();
     });
-  }, [roomId, user.uid]);
+  }, [roomId, user]);
 
   useEffect(() => {
-    checkScrollBottom();
+    if (!checkIsScrollButtom()) {
+      moveScrollBottom();
+    }
   }, [chatList]);
 
   return (
