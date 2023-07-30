@@ -7,14 +7,14 @@ import { useRecoilValue } from "recoil";
 
 export default function MainNavigation() {
   const navigate = useNavigate();
-  const userData = useRecoilValue(sessionState);
+  const user = useRecoilValue(sessionState);
   const logout = useLogout();
   return (
     <div className={styles["container"]}>
-      {userData ? (
+      {user ? (
         <>
           <span className={styles["nickname"]}>
-            <b>{userData?.displayName}님, 환영합니다. </b>
+            <b>{user?.displayName}님, 환영합니다. </b>
           </span>
           <Button variant="primary" onClick={logout}>
             Sign out
