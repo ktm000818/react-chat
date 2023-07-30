@@ -10,22 +10,27 @@ export default function Favorited() {
   const [favorites, setFavorites] = useRecoilState(favoritesListState);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
-  const userFavoritesRef = ref(database, `user_favorites/${user.uid}`);
 
   const getAndSetFavorites = useCallback(async () => {
+    if (!user) {
+      return;
+    }
     const rooms = await getFavoritesByUID(user.uid);
     setFavorites(rooms);
-  }, [setFavorites, user.uid]);
+  }, [setFavorites, user]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+    const userFavoritesRef = ref(database, `user_favorites/${user.uid}`);
     onChildAdded(userFavoritesRef, () => {
       getAndSetFavorites();
     });
     onChildRemoved(userFavoritesRef, () => {
       getAndSetFavorites();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getAndSetFavorites, user]);
 
   return (
     <>
