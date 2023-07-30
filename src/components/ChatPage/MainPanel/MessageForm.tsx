@@ -1,6 +1,6 @@
 import { Props, createMessage } from "@/firebase-actions/chatroom/chat/actions";
 import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
-import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styles from "@styles/Chat/Main/MessageForm.module.scss";
 import { Button, Form, InputGroup } from "react-bootstrap";
@@ -8,7 +8,6 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 function MessageForm() {
   const user = useRecoilValue(sessionState);
   const roomId = useRecoilValue(chatRoomIdState);
-
   const [content, setContent] = useState("");
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,10 +15,9 @@ function MessageForm() {
   };
 
   const addMessage = () => {
-    if (!content) {
+    if (!content || !user?.uid || !user.displayName || !user.photoURL) {
       return false;
     }
-
     const data: Props = {
       roomId,
       uid: user.uid,
@@ -27,15 +25,14 @@ function MessageForm() {
       name: user.displayName,
       image: user.photoURL,
     };
-
     setContent("");
-
     createMessage(data);
   };
 
   const handleClickButton = () => {
     addMessage();
   };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!["Enter", "Shift"].includes(e.key)) {
       return false;
