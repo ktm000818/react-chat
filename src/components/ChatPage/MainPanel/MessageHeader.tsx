@@ -7,18 +7,19 @@ import UserPanel from "./UserPanel";
 function MessagesHeader() {
   const user = useRecoilValue(sessionState);
   const chatRoomInfo = useRecoilValue(chatRoomInfoState);
-
   const [isFavorite, setIsFavorite] = useState<any>(null);
 
   const getAndSetIsFavoriteRoom = useCallback(async () => {
+    if (!user?.uid) {
+      return;
+    }
     const isFavorite = await getIsFavoriteByRoomId(user.uid, chatRoomInfo.roomId);
     setIsFavorite(isFavorite);
-  }, [chatRoomInfo.roomId, user.uid]);
+  }, [chatRoomInfo.roomId, user]);
 
   useEffect(() => {
     getAndSetIsFavoriteRoom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getAndSetIsFavoriteRoom]);
 
   return (
     <div
@@ -37,6 +38,9 @@ function MessagesHeader() {
           src={isFavorite ? "filled_star.svg" : "star.svg"}
           alt="favorite"
           onClick={() => {
+            if (!user || !user.uid) {
+              return;
+            }
             if (isFavorite) {
               removeFavorite(user.uid, chatRoomInfo.roomId);
               setIsFavorite(false);
