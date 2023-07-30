@@ -30,6 +30,9 @@ export const addFavorite: FavoriteAddProps = async (uid, room) => {
 };
 
 export const removeFavorite: FavoriteRemoveProps = async (uid, roomId) => {
+  if (!uid || !roomId) {
+    return;
+  }
   const getFavoriteDocKeyByRoomId: (roomId: string) => Promise<string[] | null> = async (roomId) => {
     try {
       const dbRef = ref(database);
