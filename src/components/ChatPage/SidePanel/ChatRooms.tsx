@@ -1,4 +1,4 @@
-import CreateChatRoomModal from "@/commons/components/Modals/CreateChatRoomModal";
+import CreateChatRoomModal from "@/common/components/Modals/CreateChatRoomModal";
 import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, chatRoomInfoState, chatRoomListState, sessionState } from "@/recoil/recoil-store/store";
@@ -12,14 +12,19 @@ export default function ChatRooms() {
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
 
-  const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
-
   const getAndSetChatRooms = useCallback(async () => {
+    if (!user) {
+      return;
+    }
     const rooms = await getAllChatRoomListByUID(user.uid);
     setChatRooms(rooms);
-  }, [user.uid, setChatRooms]);
+  }, [user, setChatRooms]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+    const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
     onChildAdded(chatRoomsRef, () => {
       getAndSetChatRooms();
     });
@@ -29,8 +34,7 @@ export default function ChatRooms() {
     onChildChanged(chatRoomsRef, () => {
       getAndSetChatRooms();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getAndSetChatRooms, user]);
 
   return (
     <div style={{ margin: 10, border: "1px solid black" }}>
