@@ -1,7 +1,7 @@
 import useLoginCheck from "@/custom-hooks/useLoginCheck";
 import { isLoggedInSelector } from "@/recoil/recoil-store/store";
-import MainLogo from "@components/MainLogo";
-import MainNavigation from "@components/MainNavigation";
+import MainLogo from "./MainLogo";
+import MainNavigation from "./MainNavigation";
 import styles from "@styles/landing.module.scss";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ export default function App() {
   useLoginCheck();
   const isLogin = useRecoilValue(isLoggedInSelector);
   const navigate = useNavigate();
+
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>

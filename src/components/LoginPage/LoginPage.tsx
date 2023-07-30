@@ -8,7 +8,7 @@ import styles from "@styles/auth.module.scss";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import useLoginCheck from "@/custom-hooks/useLoginCheck";
-import { ref, set, update } from "@firebase/database";
+import { ref, update } from "@firebase/database";
 
 interface FormValues {
   email: string;
@@ -30,6 +30,11 @@ export default function Page() {
     const dbRef = ref(database);
     const updates: any = {};
     updates[`users/${uid}/isLogin`] = true;
+    updates[`users_chatroom/${uid}/isLogin`] = true;
+    updates[`users/${uid}/isLogin`] = true;
+    updates[`users/${uid}/isLogin`] = true;
+    updates[`users/${uid}/isLogin`] = true;
+    updates[`users/${uid}/isLogin`] = true;
     await update(dbRef, updates);
   };
 
@@ -38,11 +43,10 @@ export default function Page() {
       setLoading(true);
       const { email, password } = data;
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const userData = userCredential.user;
-
-      if (userData) {
-        updateUserLoginState(userData.uid);
-        setSessionState(userData);
+      const user: any = userCredential.user;
+      if (user) {
+        updateUserLoginState(user.uid);
+        setSessionState(user);
         window.location.href = "/";
       }
     } catch (error: any) {
