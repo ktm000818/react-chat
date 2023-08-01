@@ -6,7 +6,7 @@ import { Props, addChatRoom } from "@/firebase-actions/chatroom/actions";
 import { useRecoilValue } from "recoil";
 import { sessionState } from "@/recoil/recoil-store/store";
 
-function CreateChatRoomModal() {
+function ChatRoomModalOpenButton() {
   const user = useRecoilValue(sessionState);
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
@@ -37,8 +37,8 @@ function CreateChatRoomModal() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        add
+      <Button variant="primary" onClick={handleShow} style={{ padding: "0px 6px", marginLeft: "10px" }}>
+        +
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -70,4 +70,4 @@ function CreateChatRoomModal() {
   );
 }
 
-export default CreateChatRoomModal;
+export default ChatRoomModalOpenButton;
