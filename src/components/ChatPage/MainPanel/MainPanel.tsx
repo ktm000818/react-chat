@@ -2,7 +2,7 @@ import Messages from "./Message";
 import MessageForm from "./MessageForm";
 import MessagesHeader from "./MessageHeader";
 import Users from "./Users";
-import styles from "@styles/Chat/Main/MainPanel.module.scss";
+import styles from "@styles/Chat/MainPanel/MainPanel.module.scss";
 
 function MainPanel() {
   return (

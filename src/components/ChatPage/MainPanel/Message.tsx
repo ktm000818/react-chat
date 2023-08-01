@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Message, getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
-import styles from "@styles/Chat/Main/Message.module.scss";
+import styles from "@styles/Chat/MainPanel/Message.module.scss";
 import { onChildAdded, ref } from "firebase/database";
 import { useRecoilValue } from "recoil";
 
