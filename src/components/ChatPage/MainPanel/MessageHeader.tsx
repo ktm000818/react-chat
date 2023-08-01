@@ -17,6 +17,19 @@ function MessagesHeader() {
     setIsFavorite(isFavorite);
   }, [chatRoomInfo.roomId, user]);
 
+  const toggleFavorite = () => {
+    if (!user || !user.uid) {
+      return;
+    }
+    if (isFavorite) {
+      removeFavorite(user.uid, chatRoomInfo.roomId);
+      setIsFavorite(false);
+    } else {
+      addFavorite(user.uid, chatRoomInfo);
+      setIsFavorite(true);
+    }
+  };
+
   useEffect(() => {
     getAndSetIsFavoriteRoom();
   }, [getAndSetIsFavoriteRoom]);
@@ -34,22 +47,7 @@ function MessagesHeader() {
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <span style={{ fontSize: "1.5rem", marginRight: "10px" }}>{chatRoomInfo.roomName}</span>
-        <img
-          src={isFavorite ? "filled_star.svg" : "star.svg"}
-          alt="favorite"
-          onClick={() => {
-            if (!user || !user.uid) {
-              return;
-            }
-            if (isFavorite) {
-              removeFavorite(user.uid, chatRoomInfo.roomId);
-              setIsFavorite(false);
-            } else {
-              addFavorite(user.uid, chatRoomInfo);
-              setIsFavorite(true);
-            }
-          }}
-        />
+        <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
       </div>
       <UserPanel />
     </div>
