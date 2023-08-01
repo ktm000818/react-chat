@@ -35,7 +35,7 @@ export default function Favorited() {
   return (
     <>
       Favorites
-      <div style={{ margin: 10, border: "1px solid black" }}>
+      <div style={{ margin: 10 }}>
         {favorites &&
           favorites.map((room: any, index: number) => (
             <>
@@ -52,7 +52,7 @@ export default function Favorited() {
                   });
                 }}
               >
-                <h6>{room.roomName}</h6>
+                <span style={{ cursor: "pointer" }}>{room.roomName}</span>
               </div>
             </>
           ))}

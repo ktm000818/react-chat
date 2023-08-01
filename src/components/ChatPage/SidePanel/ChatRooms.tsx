@@ -1,4 +1,4 @@
-import CreateChatRoomModal from "@/common/components/Modals/CreateChatRoomModal";
+import ChatRoomModalOpenButton from "@/common/components/Modals/ChatRoomModalOpenButton";
 import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, chatRoomInfoState, chatRoomListState, sessionState } from "@/recoil/recoil-store/store";
@@ -37,39 +37,42 @@ export default function ChatRooms() {
   }, [getAndSetChatRooms, user]);
 
   return (
-    <div style={{ margin: 10, border: "1px solid black" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h6>Chat rooms</h6>
-        <CreateChatRoomModal />
+    <>
+      <div style={{ display: "flex", alignItems: "baseline" }}>
+        <h6>Chat Rooms</h6>
+        <ChatRoomModalOpenButton />
       </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {chatRooms &&
-          chatRooms.map((room: any, index: any) => {
-            return (
-              <div
-                key={index + "rooms"}
-                style={{
-                  textDecoration: chatRoomId === room.roomId ? "underline" : "none",
-                }}
-                onClick={() => {
-                  setChatRoomId(room.roomId);
-                  setChatRoomInfo({
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                  });
-                }}
-              >
-                <h6>{room.roomName}</h6>
-              </div>
-            );
-          })}
+      <div style={{ margin: "3px 10px 10px 10px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        ></div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {chatRooms &&
+            chatRooms.map((room: any, index: any) => {
+              return (
+                <div
+                  key={index + "rooms"}
+                  style={{
+                    textDecoration: chatRoomId === room.roomId ? "underline" : "none",
+                  }}
+                  onClick={() => {
+                    setChatRoomId(room.roomId);
+                    setChatRoomInfo({
+                      roomId: room.roomId,
+                      roomName: room.roomName,
+                    });
+                  }}
+                >
+                  <span style={{ cursor: "pointer" }}>{room.roomName}</span>
+                </div>
+              );
+            })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
