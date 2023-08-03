@@ -1,30 +1,26 @@
 import { addProfileImageToStorage } from "@/firebase-actions/upload/profile-image/actions";
 import { sessionState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
-import { ChangeEvent, forwardRef, useRef } from "react";
+import { ChangeEvent, ForwardedRef, MouseEventHandler, MutableRefObject, RefObject, forwardRef, useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
 
 export default function UserPanel() {
   const fileUploaderRef = useRef<HTMLInputElement>(null);
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-      }}
-    >
+    <>
       <ProfilePictureFileUploader ref={fileUploaderRef} />
-      <UserImageWithModal fileUploaderRef={fileUploaderRef} />
-      <NicknameWithModal fileUploaderRef={fileUploaderRef} />
-    </div>
+      <div className={styles["container"]}>
+        <UserImageWithDropdown fileUploaderRef={fileUploaderRef} />
+        <NicknameWithDropdown fileUploaderRef={fileUploaderRef} />
+      </div>
+    </>
   );
 }
 
-const ProfilePictureFileUploader = forwardRef((props, ref: any) => {
+const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputElement>) => {
   const sessionValue = useRecoilValue(sessionState);
   const setSessionValue = useSetRecoilState(sessionState);
-
   const handleChangeFile = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     try {
       if (target.files && target.files.length > 0) {
@@ -40,63 +36,78 @@ const ProfilePictureFileUploader = forwardRef((props, ref: any) => {
   return <input style={{ display: "none" }} type="file" ref={ref} onChange={handleChangeFile} />;
 });
 
-const UserImage = forwardRef(({ onClick }: { onClick: any }, ref: any) => {
-  const userImageURL = useRecoilValue(userImageSelector);
-  return (
-    <div
-      ref={ref}
-      style={{ height: "100%", display: "flex", alignItems: "center" }}
-      onClick={(e) => {
-        onClick(e);
-      }}
-    >
-      <div style={{ borderRadius: 50, overflow: "hidden" }}>
-        <img src={userImageURL} alt="logo" width={40} height={40} />
+function UserImageWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject<HTMLInputElement> }) {
+  const UserImage = forwardRef(({ onClick }: { onClick: MouseEventHandler<HTMLDivElement> }, ref: ForwardedRef<HTMLDivElement>) => {
+    const userImageURL = useRecoilValue(userImageSelector);
+    return (
+      <div
+        ref={ref}
+        style={{ height: "100%", display: "flex", alignItems: "center" }}
+        onClick={(e) => {
+          onClick(e);
+        }}
+      >
+        <div style={{ borderRadius: 50, overflow: "hidden" }}>
+          <img src={userImageURL} alt="logo" width={40} height={40} />
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  });
 
-function UserImageWithModal({ fileUploaderRef }: any) {
   return (
     <>
       <Dropdown drop="down-centered" style={{ height: "100%", cursor: "pointer" }}>
         <Dropdown.Toggle as={UserImage} id="s"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>프로필 사진 변경</Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              if (fileUploaderRef.current) {
+                fileUploaderRef.current.click();
+              }
+            }}
+          >
+            프로필 사진 변경
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </>
   );
 }
 
-const Nickname = forwardRef(({ onClick }: { onClick: any }, ref: any) => {
-  const loginUser = useRecoilValue(userNameSelector);
-  return (
-    <span
-      ref={ref}
-      style={{
-        marginLeft: "10px",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-      }}
-      onClick={(e) => {
-        onClick(e);
-      }}
-    >
-      {loginUser}
-    </span>
-  );
-});
-
-function NicknameWithModal({ fileUploaderRef }: any) {
+function NicknameWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject<HTMLInputElement> }) {
+  const Nickname = forwardRef(({ onClick }: { onClick: MouseEventHandler<HTMLSpanElement> }, ref: any) => {
+    const loginUser = useRecoilValue(userNameSelector);
+    return (
+      <span
+        ref={ref}
+        style={{
+          marginLeft: "10px",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+        onClick={(e) => {
+          onClick(e);
+        }}
+      >
+        {loginUser}
+      </span>
+    );
+  });
   return (
     <>
       <Dropdown align={"end"} style={{ height: "100%", cursor: "pointer" }}>
         <Dropdown.Toggle as={Nickname} id="test"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => fileUploaderRef.current.click()}>설정</Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              if (fileUploaderRef.current) {
+                fileUploaderRef.current.click();
+              }
+            }}
+          >
+            설정
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </>
