@@ -2,7 +2,7 @@ import useLoginCheck from "@/custom-hooks/useLoginCheck";
 import { isLoggedInSelector } from "@/recoil/recoil-store/store";
 import MainLogo from "./MainLogo";
 import MainNavigation from "./MainNavigation";
-import styles from "@styles/landing.module.scss";
+import styles from "@styles/HomePage.module.scss";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
