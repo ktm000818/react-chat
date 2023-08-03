@@ -3,6 +3,7 @@ import { chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
+import styles from "@styles/Chat/MainPanel/MessageHeader.module.scss";
 
 function MessagesHeader() {
   const user = useRecoilValue(sessionState);
@@ -35,18 +36,9 @@ function MessagesHeader() {
   }, [getAndSetIsFavoriteRoom]);
 
   return (
-    <div
-      style={{
-        color: "white",
-        background: "#252525",
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "20px",
-        height: "100%",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <span style={{ fontSize: "1.5rem", marginRight: "10px" }}>{chatRoomInfo.roomName}</span>
+    <div className={styles["container"]}>
+      <div className={styles["title-wrapper"]}>
+        <span className={styles["title"]}>{chatRoomInfo.roomName}</span>
         <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
       </div>
       <UserPanel />
