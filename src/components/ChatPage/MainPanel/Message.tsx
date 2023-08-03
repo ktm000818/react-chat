@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Message, getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
@@ -7,6 +7,7 @@ import { onChildAdded, ref } from "firebase/database";
 import { useRecoilValue } from "recoil";
 
 function Messages() {
+  const messageId = useId();
   const containerRef = useRef<any>();
   const user = useRecoilValue(sessionState);
   const roomId = useRecoilValue(chatRoomIdState);
@@ -45,56 +46,24 @@ function Messages() {
 
   return (
     <div className={styles["container"]} ref={containerRef}>
-      {chatList.length > 0 &&
-        chatList.map((chat: any, index) => {
-          return (
-            <React.Fragment key={index + "messages"}>
-              <div
-                style={{
-                  display: "flex",
-                  height: "auto",
-                  padding: "10px 0px 10px 5px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "70px",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 50,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img src={chat.image} alt="userPhoto" width={"100%"} height={"100%"} />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div>
-                    <h6 style={{ color: "whitesmoke" }}>{chat.name}</h6>
-                  </div>
-                  <div>
-                    <span style={{ color: "whitesmoke" }}>{chat.content}</span>
-                  </div>
+      {(chatList || []).map((chat: Message) => {
+        return (
+          <React.Fragment key={messageId}>
+            <div className={styles["chat-wrapper"]}>
+              <div className={styles["image-wrapper"]}>
+                <div className={styles["image"]}>
+                  <img src={chat.image} alt="userPhoto" width={"100%"} height={"100%"} />
                 </div>
               </div>
-              <hr style={{ padding: 0, marginBottom: 0, marginTop: 0 }} />
-            </React.Fragment>
-          );
-        })}
+              <div className={styles["nickname-content-wrapper"]}>
+                <span className={styles["nickname"]}>{chat.name}</span>
+                <span className={styles["content"]}>{chat.content}</span>
+              </div>
+            </div>
+            <hr className={styles["underline"]} />
+          </React.Fragment>
+        );
+      })}
     </div>
   );
 }
