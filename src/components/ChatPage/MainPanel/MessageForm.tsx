@@ -53,20 +53,13 @@ function MessageForm() {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ display: "flex", width: "80%" }}>
+    <div className={styles["container"]}>
+      <div className={styles["custom-input-wrapper"]}>
         <InputGroup>
           <Form.Control
+            className={styles["custom-input"]}
             as="input"
             aria-label="With textarea"
-            className={styles["custom-input"]}
             type="text"
             value={content}
             onChange={handleChangeInput}
