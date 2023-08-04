@@ -53,16 +53,6 @@ export const chatRoomInfoState = atom<ChatRoomInfo>({
   effects: [persistAtom],
 });
 
-export const chatRoomListState = atom<any[]>({
-  key: "chatRoomListState",
-  default: [],
-});
-
-export const favoritesListState = atom<any[]>({
-  key: "favoritesListState",
-  default: [],
-});
-
 export const isLoggedInSelector = selector<boolean>({
   key: "isLoggedInSelector",
   get: ({ get }) => {
