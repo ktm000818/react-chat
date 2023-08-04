@@ -5,6 +5,7 @@ import { chatRoomIdState, chatRoomInfoState, sessionState } from "@/recoil/recoi
 import { onChildAdded, onChildChanged, onChildRemoved, ref } from "@firebase/database";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import styles from "@styles/Chat/SidePanel/ChatRooms.module.scss";
 
 export default function ChatRooms() {
   const user = useRecoilValue(sessionState);
@@ -18,6 +19,14 @@ export default function ChatRooms() {
     setChatRooms(rooms);
   }, [user]);
 
+  const enterRoom = (room: ChatRoom) => {
+    setChatRoomId(room.roomId);
+    setChatRoomInfo({
+      roomId: room.roomId,
+      roomName: room.roomName,
+    });
+  };
+
   useEffect(() => {
     if (!user) return;
     const chatRoomsRef = ref(database, `user_chatroom/${user.uid}`);
@@ -28,39 +37,24 @@ export default function ChatRooms() {
 
   return (
     <>
-      <div style={{ display: "flex", alignItems: "baseline" }}>
+      <div className={styles["title-container"]}>
         <h6>Chat Rooms</h6>
         <ChatRoomModalOpenButton />
       </div>
-      <div style={{ margin: "3px 10px 10px 10px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        ></div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          {(chatRooms || []).map((room: ChatRoom, _) => {
-            return (
-              <div
-                key={room.roomId}
-                style={{
-                  textDecoration: chatRoomId === room.roomId ? "underline" : "none",
-                }}
-                onClick={() => {
-                  setChatRoomId(room.roomId);
-                  setChatRoomInfo({
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                  });
-                }}
-              >
-                <span style={{ cursor: "pointer" }}>{room.roomName}</span>
-              </div>
-            );
-          })}
-        </div>
+      <div className={styles["room-container"]}>
+        {(chatRooms || []).map((room: ChatRoom, _) => {
+          return (
+            <div
+              key={room.roomId}
+              style={{
+                textDecoration: chatRoomId === room.roomId ? "underline" : "none",
+              }}
+              onClick={() => enterRoom(room)}
+            >
+              <span className={styles["room-name"]}>{room.roomName}</span>
+            </div>
+          );
+        })}
       </div>
     </>
   );

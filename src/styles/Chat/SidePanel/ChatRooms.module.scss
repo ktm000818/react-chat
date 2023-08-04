@@ -1,0 +1,14 @@
+.title-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.room-container {
+  margin: 3px 10px 10px 10px;
+  display: flex;
+  flex-direction: column;
+
+  .room-name {
+    cursor: pointer;
+  }
+}
