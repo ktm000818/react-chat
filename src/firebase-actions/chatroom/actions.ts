@@ -26,7 +26,7 @@ interface Members {
   [name: string]: Member;
 }
 
-interface ChatRoom extends Favorite {
+export interface ChatRoom extends Favorite {
   createdAt: string;
   description: string;
   members: Members;
