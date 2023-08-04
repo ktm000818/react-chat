@@ -4,6 +4,7 @@ import { chatRoomIdState, chatRoomInfoState, sessionState } from "@/recoil/recoi
 import { onChildAdded, onChildRemoved, ref } from "firebase/database";
 import { useCallback, useEffect, Fragment, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import styles from "@styles/Chat/SidePanel/Favorited.module.scss";
 
 export default function Favorited() {
   const user = useRecoilValue(sessionState);
@@ -17,6 +18,14 @@ export default function Favorited() {
     setFavorites(rooms);
   }, [user]);
 
+  const enterRoom = (room: Favorite) => {
+    setChatRoomId(room.roomId);
+    setChatRoomInfo({
+      roomId: room.roomId,
+      roomName: room.roomName,
+    });
+  };
+
   useEffect(() => {
     if (!user) return;
     const userFavoritesRef = ref(database, `user_favorites/${user.uid}`);
@@ -26,23 +35,19 @@ export default function Favorited() {
 
   return (
     <>
-      Favorites
-      <div style={{ margin: 10 }}>
+      <div className={styles["title-container"]}>
+        <h6>Favorites</h6>
+      </div>
+      <div className={styles["favorite-container"]}>
         {(favorites || []).map((room: Favorite, _) => (
           <Fragment key={room.roomId}>
             <div
               style={{
                 textDecoration: chatRoomId === room.roomId ? "underline" : "none",
               }}
-              onClick={() => {
-                setChatRoomId(room.roomId);
-                setChatRoomInfo({
-                  roomId: room.roomId,
-                  roomName: room.roomName,
-                });
-              }}
+              onClick={() => enterRoom(room)}
             >
-              <span style={{ cursor: "pointer" }}>{room.roomName}</span>
+              <span className={styles["favorite-name"]}>{room.roomName}</span>
             </div>
           </Fragment>
         ))}

@@ -1,0 +1,14 @@
+.title-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.favorite-container {
+  margin: 3px 10px 10px 10px;
+  display: flex;
+  flex-direction: column;
+
+  .favorite-name {
+    cursor: pointer;
+  }
+}
