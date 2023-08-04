@@ -46,9 +46,9 @@ function Messages() {
 
   return (
     <div className={styles["container"]} ref={containerRef}>
-      {(chatList || []).map((chat: Message) => {
+      {(chatList || []).map((chat: Message, index: number) => {
         return (
-          <React.Fragment key={messageId}>
+          <React.Fragment key={messageId + index}>
             <div className={styles["chat-wrapper"]}>
               <div className={styles["image-wrapper"]}>
                 <div className={styles["image"]}>
