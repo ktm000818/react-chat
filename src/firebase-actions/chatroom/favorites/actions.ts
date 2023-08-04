@@ -85,6 +85,7 @@ export const removeFavorite: FavoriteRemoveProps = async (uid, roomId) => {
 export interface Favorite {
   uid: string;
   roomId: string;
+  roomName: string;
 }
 
 interface Favorites {
