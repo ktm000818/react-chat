@@ -8,13 +8,13 @@ import styles from "@styles/Chat/SidePanel/Favorited.module.scss";
 
 export default function Favorited() {
   const user = useRecoilValue(sessionState);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [favorites, setFavorites] = useState<Favorite[] | null>(null);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
 
   const getAndSetFavorites = useCallback(async () => {
     if (!user) return;
-    const rooms: Favorite[] = await getFavoritesByUID(user.uid);
+    const rooms = await getFavoritesByUID(user.uid);
     setFavorites(rooms);
   }, [user]);
 
@@ -35,9 +35,11 @@ export default function Favorited() {
 
   return (
     <>
-      <div className={styles["title-container"]}>
-        <h6>Favorites</h6>
-      </div>
+      {favorites && (
+        <div className={styles["title-container"]}>
+          <h6>Favorites</h6>
+        </div>
+      )}
       <div className={styles["favorite-container"]}>
         {(favorites || []).map((room: Favorite, _) => (
           <Fragment key={room.roomId}>

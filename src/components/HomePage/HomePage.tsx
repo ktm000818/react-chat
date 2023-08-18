@@ -19,8 +19,7 @@ export default function App() {
         <MainNavigation />
       </div>
       <div className={styles["title-wrapper"]}>
-        <p className={styles["title"]}>nexlacks</p>
-        <p>yeah</p>
+        <img src="logo/logo_transparent.png" width={300} height={300} alt="title-logo"></img>
         {isLogin && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
       </div>
     </div>

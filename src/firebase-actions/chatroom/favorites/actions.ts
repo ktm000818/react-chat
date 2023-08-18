@@ -92,7 +92,7 @@ interface Favorites {
   [key: string]: Favorite;
 }
 
-export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[]> = async (uid) => {
+export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[] | null> = async (uid) => {
   if (!uid) {
     return [];
   }
@@ -104,10 +104,10 @@ export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[]>
     if (result.exists()) {
       return Object.values(resultVal);
     } else {
-      return [];
+      return null;
     }
   } catch (error) {
-    return [];
+    return null;
   }
 };
 

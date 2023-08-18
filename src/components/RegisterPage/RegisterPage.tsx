@@ -33,14 +33,20 @@ export default function RegisterPage() {
     try {
       setLoading(true);
       const { email, password } = data;
-      const createdUser = await createUserWithEmailAndPassword(auth, email, password);
-      await updateUserProfile(data);
-      await setUserOnDB(createdUser);
-      navigate("/login");
-    } catch (error: any) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(async (user) => {
+          await setUserOnDB(user);
+          await updateUserProfile(data);
+          navigate("/login");
+        })
+        .catch((e) => {
+          alert(e.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (e: any) {
+      console.error(e.message);
     }
   };
 
