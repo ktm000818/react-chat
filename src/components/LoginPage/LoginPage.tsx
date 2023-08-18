@@ -47,7 +47,7 @@ export default function Page() {
       if (user) {
         updateUserLoginState(user.uid);
         setSessionState(user);
-        window.location.href = "/";
+        navigate("/");
       }
     } catch (error: any) {
       setSessionState(null);

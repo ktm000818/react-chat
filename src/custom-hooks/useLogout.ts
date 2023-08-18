@@ -3,8 +3,10 @@ import { signOut } from "firebase/auth";
 import { auth, database } from "@/firebaseModule";
 import { sessionState } from "@/recoil/recoil-store/store";
 import { ref, update } from "@firebase/database";
+import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
+  const navigate = useNavigate();
   const [session, setSession] = useRecoilState(sessionState);
 
   const updateLoginStateToFalse = async () => {
@@ -21,12 +23,12 @@ export function useLogout() {
   const logout = async () => {
     await signOut(auth)
       .then(async () => {
-        window.location.href = "/";
+        navigate("/");
         updateLoginStateToFalse();
         setSession(null);
       })
       .catch((error) => {
-        alert("로그아웃 할 수 없습니다. 잠시 후 시도해주세요.");
+        alert(error.message);
       });
   };
 

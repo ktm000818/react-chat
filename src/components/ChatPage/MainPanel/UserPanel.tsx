@@ -4,6 +4,7 @@ import { ChangeEvent, ForwardedRef, MouseEventHandler, MutableRefObject, RefObje
 import Dropdown from "react-bootstrap/Dropdown";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
+import { useLogout } from "@/custom-hooks/useLogout";
 
 export default function UserPanel() {
   const fileUploaderRef = useRef<HTMLInputElement>(null);
@@ -75,6 +76,7 @@ function UserImageWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject
 }
 
 function NicknameWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject<HTMLInputElement> }) {
+  const logout = useLogout();
   const Nickname = forwardRef(({ onClick }: { onClick: MouseEventHandler<HTMLSpanElement> }, ref: any) => {
     const loginUser = useRecoilValue(userNameSelector);
     return (
@@ -99,15 +101,7 @@ function NicknameWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject<
       <Dropdown align={"end"} style={{ height: "100%", cursor: "pointer" }}>
         <Dropdown.Toggle as={Nickname} id="test"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item
-            onClick={() => {
-              if (fileUploaderRef.current) {
-                fileUploaderRef.current.click();
-              }
-            }}
-          >
-            설정
-          </Dropdown.Item>
+          <Dropdown.Item onClick={logout}>로그아웃</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </>
