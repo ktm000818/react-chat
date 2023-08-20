@@ -13,7 +13,7 @@ export default function UserPanel() {
       <ProfilePictureFileUploader ref={fileUploaderRef} />
       <div className={styles["container"]}>
         <UserImageWithDropdown fileUploaderRef={fileUploaderRef} />
-        <NicknameWithDropdown fileUploaderRef={fileUploaderRef} />
+        <NicknameWithDropdown />
       </div>
     </>
   );
