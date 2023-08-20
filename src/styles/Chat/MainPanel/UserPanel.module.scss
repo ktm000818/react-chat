@@ -3,3 +3,30 @@
   justify-content: space-around;
   align-items: center;
 }
+
+.nickname {
+  margin-left: 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-input {
+  display: none;
+}
+
+.user-image-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.user-image {
+  border-radius: 50px;
+  overflow: hidden;
+}
