@@ -1,10 +1,7 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { auth } from "./firebaseModule";
+import HomePage from "@components/HomePage/HomePage";
 import LoginPage from "@components/LoginPage/LoginPage";
 import RegisterPage from "@components/RegisterPage/RegisterPage";
-import HomePage from "@components/HomePage/HomePage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ChatPage from "./components/ChatPage/ChatPage";
 
 export default function App() {
