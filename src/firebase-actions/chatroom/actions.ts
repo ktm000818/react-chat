@@ -5,7 +5,7 @@ import { Favorite } from "./favorites/actions";
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
 
-export interface Props {
+export interface AddChatRoom {
   roomName: string;
   description: string;
   user: {
@@ -57,7 +57,7 @@ export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatR
   }
 };
 
-export const addChatRoom = async ({ user, roomName, description }: Props) => {
+export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) => {
   const currentTime = new Date().getTime();
   const NEW_ROOM_ID = window.crypto.randomUUID();
   const defaultRoomInfo = {
