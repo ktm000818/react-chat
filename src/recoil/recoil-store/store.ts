@@ -7,8 +7,8 @@ interface ChatRoomInfo {
   roomName: string;
 }
 
-interface Session {
-  uid?: string;
+export interface Session {
+  uid: string;
   email?: string;
   emailVerified?: boolean;
   displayName?: string;
