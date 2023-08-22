@@ -1,26 +1,24 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-import { Props, addChatRoom } from "@/firebase-actions/chatroom/actions";
-import { useRecoilValue } from "recoil";
+import { AddChatRoom, addChatRoom } from "@/firebase-actions/chatroom/actions";
 import { sessionState } from "@/recoil/recoil-store/store";
+import { useState } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
+import { useRecoilValue } from "recoil";
 
-export default function ChatRoomModalOpenButton() {
+interface ChatRoomAddingModal {
+  show: boolean;
+  close: () => void;
+}
+
+export default function ChatRoomAddingModal({ show, close }: ChatRoomAddingModal) {
   const user = useRecoilValue(sessionState);
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const handleClickAdd = async () => {
     if (!user || !user?.uid || !user?.displayName || !user?.photoURL) {
       return false;
     }
-    const data: Props = {
+    const data: AddChatRoom = {
       roomName: roomName,
       description: description,
       user: {
@@ -32,16 +30,12 @@ export default function ChatRoomModalOpenButton() {
     await addChatRoom(data);
 
     alert("채팅방 생성 완료!");
-    handleClose();
+    close();
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} style={{ padding: "0px 6px", marginLeft: "10px" }}>
-        +
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={close}>
         <Modal.Header closeButton>
           <Modal.Title>Create Chat Room</Modal.Title>
         </Modal.Header>
@@ -58,7 +52,7 @@ export default function ChatRoomModalOpenButton() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={close}>
             Close
           </Button>
           <Button variant="primary" onClick={handleClickAdd}>
