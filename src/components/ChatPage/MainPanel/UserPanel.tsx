@@ -1,6 +1,6 @@
 import { useLogout } from "@/custom-hooks/useLogout";
 import { addProfileImageToStorage } from "@/firebase-actions/upload/profile-image/actions";
-import { sessionState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
+import { Session, sessionState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
 import { ChangeEvent, ForwardedRef, forwardRef, MouseEventHandler, RefObject, useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -20,7 +20,6 @@ export default function UserPanel() {
 }
 
 const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputElement>) => {
-  const sessionValue = useRecoilValue(sessionState);
   const setSessionValue = useSetRecoilState(sessionState);
   const handleChangeFile = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     try {
@@ -28,7 +27,12 @@ const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputEle
         const file: any = target.files[0];
         const user = await addProfileImageToStorage(file);
         if (user && user.image) {
-          setSessionValue({ ...sessionValue, photoURL: user.image });
+          setSessionValue((curr) => {
+            return {
+              ...(curr as Session),
+              photoURL: user.image,
+            };
+          });
         }
       }
     } catch (error) {}
