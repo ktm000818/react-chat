@@ -1,4 +1,4 @@
-import ChatRoomModalOpenButton from "@/common/components/Modals/ChatRoomModalOpenButton";
+import ChatRoomModalOpenButton from "@/common/components/Buttons/ChatRoomAddingModalOpenButton";
 import { ChatRoom, getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
