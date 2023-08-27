@@ -6,10 +6,11 @@ import styles from "@styles/HomePage.module.scss";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { auth } from "@/firebaseModule";
 
 export default function App() {
   useLoginCheck();
-  const isLogin = useRecoilValue(isLoggedInSelector);
+  const user = auth.currentUser;
   const navigate = useNavigate();
 
   return (
@@ -20,7 +21,7 @@ export default function App() {
       </div>
       <div className={styles["title-wrapper"]}>
         <img src="logo/logo_transparent.png" width={300} height={300} alt="title-logo"></img>
-        {isLogin && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
+        {user && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useLogout } from "@/custom-hooks/useLogout";
+import { auth } from "@/firebaseModule";
 import { sessionState } from "@/recoil/recoil-store/store";
 import styles from "@styles/MainNavigation.module.scss";
 import Button from "react-bootstrap/Button";
@@ -7,14 +8,15 @@ import { useRecoilValue } from "recoil";
 
 export default function MainNavigation() {
   const navigate = useNavigate();
-  const user = useRecoilValue(sessionState);
+  const user = auth.currentUser;
+
   const logout = useLogout();
   return (
     <div className={styles["container"]}>
       {user ? (
         <>
           <span className={styles["nickname"]}>
-            <b>{user?.displayName}님, 환영합니다. </b>
+            <b>{user.displayName}님, 환영합니다. </b>
           </span>
           <Button variant="primary" onClick={logout}>
             Sign out

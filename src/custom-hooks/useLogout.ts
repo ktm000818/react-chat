@@ -7,25 +7,25 @@ import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
   const navigate = useNavigate();
-  const [session, setSession] = useRecoilState(sessionState);
+  const user = auth.currentUser;
 
   const updateLoginStateToFalse = async () => {
-    if (!session) {
+    if (!user) {
       return;
     }
 
     const dbRef = ref(database);
     const updates: any = {};
-    updates[`users/${session.uid}/isLogin`] = false;
+    updates[`users/${user.uid}/isLogin`] = false;
     await update(dbRef, updates);
   };
 
   const logout = async () => {
+    if (!user) return;
     await signOut(auth)
       .then(async () => {
         navigate("/");
         updateLoginStateToFalse();
-        setSession(null);
       })
       .catch((error) => {
         alert(error.message);

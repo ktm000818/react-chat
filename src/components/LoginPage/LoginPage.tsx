@@ -19,7 +19,6 @@ export default function Page() {
   useLoginCheck();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const setSessionState = useSetRecoilState(sessionState);
   const {
     register,
     handleSubmit,
@@ -46,11 +45,9 @@ export default function Page() {
       const user: any = userCredential.user;
       if (user) {
         updateUserLoginState(user.uid);
-        setSessionState(user);
         navigate("/");
       }
     } catch (error: any) {
-      setSessionState(null);
       console.error(error.message);
     } finally {
       setLoading(false);
