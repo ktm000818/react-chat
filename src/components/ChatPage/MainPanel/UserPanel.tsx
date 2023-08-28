@@ -1,10 +1,10 @@
 import { useLogout } from "@/custom-hooks/useLogout";
-import { addProfileImageToStorage } from "@/firebase-actions/upload/profile-image/actions";
-import { Session, sessionState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
+import { addProfileImageToStorageAndDatabase } from "@/firebase-actions/upload/profile-image/actions";
+import { userAuthState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
-import { ChangeEvent, ForwardedRef, forwardRef, MouseEventHandler, RefObject, useRef } from "react";
+import { ChangeEvent, ForwardedRef, MouseEventHandler, RefObject, forwardRef, useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function UserPanel() {
   const fileUploaderRef = useRef<HTMLInputElement>(null);
@@ -20,19 +20,14 @@ export default function UserPanel() {
 }
 
 const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputElement>) => {
-  const setSessionValue = useSetRecoilState(sessionState);
+  const [userAuth, setUserAuthState] = useRecoilState(userAuthState);
   const handleChangeFile = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     try {
       if (target.files && target.files.length > 0) {
         const file: any = target.files[0];
-        const user = await addProfileImageToStorage(file);
-        if (user && user.image) {
-          setSessionValue((curr) => {
-            return {
-              ...(curr as Session),
-              photoURL: user.image,
-            };
-          });
+        const imageUrl = await addProfileImageToStorageAndDatabase(file);
+        if (imageUrl && userAuth) {
+          setUserAuthState({ ...userAuth, photoURL: imageUrl });
         }
       }
     } catch (error) {}
@@ -47,7 +42,7 @@ function UserImageWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject
     return (
       <div className={styles["user-image-wrapper"]} ref={ref} onClick={onClick}>
         <div className={styles["user-image"]}>
-          <img src={userImageURL} alt="logo" width={40} height={40} />
+          <img src={userImageURL ?? undefined} alt="logo" width={40} height={40} />
         </div>
       </div>
     );
