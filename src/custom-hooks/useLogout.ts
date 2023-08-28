@@ -1,13 +1,13 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { signOut } from "firebase/auth";
 import { auth, database } from "@/firebaseModule";
-import { sessionState } from "@/recoil/recoil-store/store";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import { ref, update } from "@firebase/database";
 import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const user = useRecoilValue(userAuthState);
 
   const updateLoginStateToFalse = async () => {
     if (!user) {
@@ -20,12 +20,12 @@ export function useLogout() {
     await update(dbRef, updates);
   };
 
-  const logout = async () => {
+  const logout = () => {
     if (!user) return;
-    await signOut(auth)
-      .then(async () => {
-        navigate("/");
+    signOut(auth)
+      .then(() => {
         updateLoginStateToFalse();
+        navigate("/");
       })
       .catch((error) => {
         alert(error.message);

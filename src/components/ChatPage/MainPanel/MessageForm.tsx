@@ -1,12 +1,12 @@
 import { Props, createMessage } from "@/firebase-actions/chatroom/chat/actions";
-import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
+import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styles from "@styles/Chat/MainPanel/MessageForm.module.scss";
 import { Button, Form, InputGroup } from "react-bootstrap";
 
 function MessageForm() {
-  const user = useRecoilValue(sessionState);
+  const user = useRecoilValue(userAuthState);
   const roomId = useRecoilValue(chatRoomIdState);
   const [content, setContent] = useState("");
 

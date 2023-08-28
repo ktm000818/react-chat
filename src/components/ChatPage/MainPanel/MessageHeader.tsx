@@ -1,12 +1,12 @@
 import { addFavorite, getIsFavoriteByRoomId, removeFavorite } from "@/firebase-actions/chatroom/favorites/actions";
-import { chatRoomInfoState, sessionState } from "@/recoil/recoil-store/store";
+import { chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
 import styles from "@styles/Chat/MainPanel/MessageHeader.module.scss";
 
 function MessagesHeader() {
-  const user = useRecoilValue(sessionState);
+  const user = useRecoilValue(userAuthState);
   const chatRoomInfo = useRecoilValue(chatRoomInfoState);
   const [isFavorite, setIsFavorite] = useState<any>(null);
 

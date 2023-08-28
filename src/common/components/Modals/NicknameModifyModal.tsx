@@ -1,6 +1,6 @@
 import { AddChatRoom, addChatRoom } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
-import { sessionState } from "@/recoil/recoil-store/store";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import { ref, update } from "firebase/database";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
@@ -12,7 +12,7 @@ interface NicknameModifyModal {
 }
 
 export default function NicknameModifyModal({ show, close }: NicknameModifyModal) {
-  const session = useRecoilValue(sessionState);
+  const session = useRecoilValue(userAuthState);
   const [nickname, setNickname] = useState<string>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value);

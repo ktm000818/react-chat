@@ -1,16 +1,15 @@
 import useLoginCheck from "@/custom-hooks/useLoginCheck";
-import { isLoggedInSelector } from "@/recoil/recoil-store/store";
-import MainLogo from "./MainLogo";
-import MainNavigation from "./MainNavigation";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import styles from "@styles/HomePage.module.scss";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { auth } from "@/firebaseModule";
+import MainLogo from "./MainLogo";
+import MainNavigation from "./MainNavigation";
 
 export default function App() {
+  const userAuth = useRecoilValue(userAuthState);
   useLoginCheck();
-  const user = auth.currentUser;
   const navigate = useNavigate();
 
   return (
@@ -21,7 +20,7 @@ export default function App() {
       </div>
       <div className={styles["title-wrapper"]}>
         <img src="logo/logo_transparent.png" width={300} height={300} alt="title-logo"></img>
-        {user && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
+        {userAuth && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
       </div>
     </div>
   );

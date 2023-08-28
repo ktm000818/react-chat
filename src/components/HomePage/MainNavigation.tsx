@@ -1,6 +1,6 @@
 import { useLogout } from "@/custom-hooks/useLogout";
 import { auth } from "@/firebaseModule";
-import { sessionState } from "@/recoil/recoil-store/store";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import styles from "@styles/MainNavigation.module.scss";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +8,9 @@ import { useRecoilValue } from "recoil";
 
 export default function MainNavigation() {
   const navigate = useNavigate();
-  const user = auth.currentUser;
-
   const logout = useLogout();
+  const user = useRecoilValue(userAuthState);
+
   return (
     <div className={styles["container"]}>
       {user ? (

@@ -1,5 +1,5 @@
 import { AddChatRoom, addChatRoom } from "@/firebase-actions/chatroom/actions";
-import { sessionState } from "@/recoil/recoil-store/store";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
@@ -10,7 +10,7 @@ interface ChatRoomAddingModal {
 }
 
 export default function ChatRoomAddingModal({ show, close }: ChatRoomAddingModal) {
-  const user = useRecoilValue(sessionState);
+  const user = useRecoilValue(userAuthState);
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
 

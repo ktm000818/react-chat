@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Message, getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
-import { chatRoomIdState, sessionState } from "@/recoil/recoil-store/store";
+import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/Message.module.scss";
 import { onChildAdded, ref } from "firebase/database";
 import { useRecoilValue } from "recoil";
@@ -9,7 +9,7 @@ import { useRecoilValue } from "recoil";
 function Messages() {
   const messageId = useId();
   const containerRef = useRef<any>();
-  const user = useRecoilValue(sessionState);
+  const user = useRecoilValue(userAuthState);
   const roomId = useRecoilValue(chatRoomIdState);
   const [chatList, setChatList] = useState<Message[]>([]);
 

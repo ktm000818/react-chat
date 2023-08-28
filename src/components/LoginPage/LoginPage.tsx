@@ -1,14 +1,12 @@
+import useLoginCheck from "@/custom-hooks/useLoginCheck";
 import { auth, database } from "@/firebaseModule";
-import { sessionState } from "@recoil/recoil-store/store";
+import { ref, update } from "@firebase/database";
+import styles from "@styles/auth.module.scss";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
-import styles from "@styles/auth.module.scss";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import useLoginCheck from "@/custom-hooks/useLoginCheck";
-import { ref, update } from "@firebase/database";
 
 interface FormValues {
   email: string;
@@ -42,7 +40,7 @@ export default function Page() {
       setLoading(true);
       const { email, password } = data;
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user: any = userCredential.user;
+      const user = userCredential.user;
       if (user) {
         updateUserLoginState(user.uid);
         navigate("/");

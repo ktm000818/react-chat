@@ -1,12 +1,12 @@
 import { auth } from "@/firebaseModule";
-import { sessionState } from "@/recoil/recoil-store/store";
+import { userAuthState } from "@/recoil/recoil-store/store";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 
 export default function useLoginCheck() {
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const user = useRecoilValue(userAuthState);
   const ACCESS_PAGES = useMemo(() => ["/chat", "/"], []);
   const ACCESS_PAGES_FOR_UNKNOWN = useMemo(() => ["/login", "/register", "/"], []);
   const currLocation = window.location.pathname;
