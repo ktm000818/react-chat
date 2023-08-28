@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
@@ -7,38 +8,11 @@ interface ChatRoomInfo {
   roomName: string;
 }
 
-export interface Session {
-  uid: string;
-  email?: string;
-  emailVerified?: boolean;
-  displayName?: string;
-  isAnonymous?: boolean;
-  photoURL?: string;
-  providerData?: [
-    {
-      providerId?: string;
-      uid?: string;
-      displayName?: string;
-      email?: string;
-      phoneNumber?: null;
-      photoURL?: string;
-    }
-  ];
-  stsTokenManager?: {
-    refreshToken?: string;
-    accessToken?: string;
-    expirationTime?: number;
-  };
-  createdAt?: string;
-  lastLoginAt?: string;
-  apiKey?: string;
-  appName?: string;
-}
-
-export const sessionState = atom<Session | null>({
-  key: "sessionState",
+export const userAuthState = atom<User | null>({
+  key: "userAuthState",
   default: null,
   effects: [persistAtom],
+  dangerouslyAllowMutability: true,
 });
 
 export const chatRoomIdState = atom<string>({
@@ -56,7 +30,7 @@ export const chatRoomInfoState = atom<ChatRoomInfo>({
 export const isLoggedInSelector = selector<boolean>({
   key: "isLoggedInSelector",
   get: ({ get }) => {
-    const user = get(sessionState);
+    const user = get(userAuthState);
     if (user) {
       return true;
     } else {
@@ -65,26 +39,26 @@ export const isLoggedInSelector = selector<boolean>({
   },
 });
 
-export const userNameSelector = selector<string | undefined>({
+export const userNameSelector = selector<string | null>({
   key: "userName",
   get: ({ get }) => {
-    const user = get(sessionState);
+    const user = get(userAuthState);
     if (user) {
-      return user.displayName;
+      return user.providerData[0].displayName;
     } else {
-      return undefined;
+      return null;
     }
   },
 });
 
-export const userImageSelector = selector<string | undefined>({
+export const userImageSelector = selector<string | null>({
   key: "userImage",
   get: ({ get }) => {
-    const user = get(sessionState);
+    const user = get(userAuthState);
     if (user) {
-      return user.photoURL;
+      return user.providerData[0].photoURL;
     } else {
-      return undefined;
+      return null;
     }
   },
 });
