@@ -27,7 +27,6 @@ export default function Page() {
     const dbRef = ref(database);
     const updates: any = {};
     updates[`users/${uid}/isLogin`] = true;
-    updates[`users_chatroom/${uid}/isLogin`] = true;
     updates[`users/${uid}/isLogin`] = true;
     updates[`users/${uid}/isLogin`] = true;
     updates[`users/${uid}/isLogin`] = true;
