@@ -1,10 +1,10 @@
-import { AddChatRoom, addChatRoom } from "@/firebase-actions/chatroom/actions";
-import { database } from "@/firebaseModule";
+import { auth, database } from "@/firebaseModule";
 import { userAuthState } from "@/recoil/recoil-store/store";
-import { ref, update } from "firebase/database";
+import { updateProfile } from "firebase/auth";
+import { child, get, ref, update } from "firebase/database";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 interface NicknameModifyModal {
   show: boolean;
@@ -13,6 +13,7 @@ interface NicknameModifyModal {
 
 export default function NicknameModifyModal({ show, close }: NicknameModifyModal) {
   const session = useRecoilValue(userAuthState);
+  const [userAuth, setUserAuth] = useRecoilState(userAuthState);
   const [nickname, setNickname] = useState<string>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value);
@@ -21,18 +22,31 @@ export default function NicknameModifyModal({ show, close }: NicknameModifyModal
   const updateNicknameByUID = async () => {
     const uid = session?.uid;
 
+    if (!auth.currentUser) return;
     if (!uid) return;
+    if (!userAuth) return;
 
     const dbRef = ref(database);
+    const userChatRooms = await get(child(dbRef, `user_chatroom/${uid}`));
+
     const updates: any = {};
+    for (let roomKey in userChatRooms.val()) {
+      updates[`user_chatroom/${uid}/${roomKey}/members/${uid}/name`] = nickname;
+      updates[`chatroom/${roomKey}/members/${uid}/name`] = nickname;
+    }
     updates[`users/${uid}/name`] = nickname;
-    updates[`user_chatroom/${uid}/name`] = nickname;
+
+    await updateProfile(auth.currentUser, {
+      displayName: nickname,
+    });
     await update(dbRef, updates);
+    setUserAuth({ ...userAuth, displayName: nickname });
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    alert(nickname);
+    updateNicknameByUID();
+    close();
   };
 
   return (
@@ -50,7 +64,7 @@ export default function NicknameModifyModal({ show, close }: NicknameModifyModal
           <Button type="button" variant="secondary" onClick={close}>
             Close
           </Button>
-          <Button type="submit" variant="primary" onClick={() => {}}>
+          <Button type="submit" variant="primary" onClick={handleSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>

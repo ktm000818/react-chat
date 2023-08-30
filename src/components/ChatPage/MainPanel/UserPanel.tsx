@@ -1,10 +1,11 @@
+import NicknameModifyModal from "@/common/components/Modals/NicknameModifyModal";
 import { useLogout } from "@/custom-hooks/useLogout";
-import { addProfileImageToStorageAndDatabase } from "@/firebase-actions/upload/profile-image/actions";
+import { updateProfileImageToStorageAndDatabase } from "@/firebase-actions/upload/profile-image/actions";
 import { userAuthState, userImageSelector, userNameSelector } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
-import { ChangeEvent, ForwardedRef, MouseEventHandler, RefObject, forwardRef, useRef } from "react";
+import { ChangeEvent, ForwardedRef, MouseEventHandler, RefObject, forwardRef, useRef, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function UserPanel() {
   const fileUploaderRef = useRef<HTMLInputElement>(null);
@@ -25,7 +26,7 @@ const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputEle
     try {
       if (target.files && target.files.length > 0) {
         const file: any = target.files[0];
-        const imageUrl = await addProfileImageToStorageAndDatabase(file);
+        const imageUrl = await updateProfileImageToStorageAndDatabase(file);
         if (imageUrl && userAuth) {
           setUserAuthState({ ...userAuth, photoURL: imageUrl });
         }
@@ -63,19 +64,23 @@ function UserImageWithDropdown({ fileUploaderRef }: { fileUploaderRef: RefObject
 function NicknameWithDropdown() {
   const logout = useLogout();
   const Nickname = forwardRef(({ onClick }: { onClick: MouseEventHandler<HTMLSpanElement> }, ref: any) => {
-    const loginUser = useRecoilValue(userNameSelector);
+    const nickname = useRecoilValue(userNameSelector);
     return (
       <span className={styles["nickname"]} ref={ref} onClick={onClick}>
-        {loginUser}
+        {nickname}
       </span>
     );
   });
+  const [showNicknameModifyModal, setShowNicknameModifyModal] = useState(false);
+
   return (
     <>
+      <NicknameModifyModal show={showNicknameModifyModal} close={() => setShowNicknameModifyModal(false)} />
+
       <Dropdown className={styles["dropdown"]} align={"end"}>
         <Dropdown.Toggle as={Nickname} id="test"></Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item>닉네임 변경</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowNicknameModifyModal(true)}>닉네임 변경</Dropdown.Item>
           <Dropdown.Item onClick={logout}>로그아웃</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
