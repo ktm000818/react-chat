@@ -44,7 +44,7 @@ export const userNameSelector = selector<string | null>({
   get: ({ get }) => {
     const user = get(userAuthState);
     if (user) {
-      return user.providerData[0].displayName;
+      return user.displayName;
     } else {
       return null;
     }
@@ -56,7 +56,7 @@ export const userImageSelector = selector<string | null>({
   get: ({ get }) => {
     const user = get(userAuthState);
     if (user) {
-      return user.providerData[0].photoURL;
+      return user.photoURL;
     } else {
       return null;
     }
