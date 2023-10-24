@@ -1,18 +1,20 @@
 import { database } from "@/firebaseModule";
-import { equalTo, get, orderByChild, query, ref, set } from "firebase/database";
+import { equalTo, get, orderByChild, push, query, ref, set } from "firebase/database";
 import { Favorite } from "./favorites/actions";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
 
+interface User {
+  image: string;
+  name: string;
+  uid: string;
+}
+
 export interface AddChatRoom {
   roomName: string;
   description: string;
-  user: {
-    image: string;
-    name: string;
-    uid: string;
-  };
+  user: User;
 }
 
 interface Member {
@@ -57,6 +59,19 @@ export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatR
   }
 };
 
+export const inviteUserToChatRoom = async (user: User, roomId: string) => {
+  const newUser = {
+    [user.uid]: {
+      image: user.image,
+      name: user.name,
+      superPermission: false,
+    },
+  };
+  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
+
+  await push(userRoomListRef, newUser);
+};
+
 export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) => {
   const currentTime = new Date().getTime();
   const NEW_ROOM_ID = window.crypto.randomUUID();
@@ -74,7 +89,7 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
       },
     },
     roomId: NEW_ROOM_ID,
-    isFavorite: false,
+    // isFavorite: false,
   };
   const userRoomInfo = { ...defaultRoomInfo, isSuper: true };
 
