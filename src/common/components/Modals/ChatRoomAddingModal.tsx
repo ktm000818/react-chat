@@ -4,12 +4,12 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
 
-interface ChatRoomAddingModal {
+interface Props {
   show: boolean;
   close: () => void;
 }
 
-export default function ChatRoomAddingModal({ show, close }: ChatRoomAddingModal) {
+export default function ChatRoomAddingModal({ show, close }: Props) {
   const user = useRecoilValue(userAuthState);
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
