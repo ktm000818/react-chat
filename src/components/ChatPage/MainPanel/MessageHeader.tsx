@@ -1,9 +1,10 @@
+import InviteUserModalButton from "@/common/components/Buttons/InviteUserModalButton";
 import { addFavorite, getIsFavoriteByRoomId, removeFavorite } from "@/firebase-actions/chatroom/favorites/actions";
 import { chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
+import styles from "@styles/Chat/MainPanel/MessageHeader.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
-import styles from "@styles/Chat/MainPanel/MessageHeader.module.scss";
 
 function MessagesHeader() {
   const user = useRecoilValue(userAuthState);
@@ -40,6 +41,7 @@ function MessagesHeader() {
       <div className={styles["title-wrapper"]}>
         <span className={styles["title"]}>{chatRoomInfo.roomName}</span>
         <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
+        <InviteUserModalButton>초대</InviteUserModalButton>
       </div>
       <UserPanel />
     </div>
