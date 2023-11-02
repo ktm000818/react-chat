@@ -1,9 +1,9 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import { signOut } from "firebase/auth";
 import { auth, database } from "@/firebaseModule";
 import { userAuthState } from "@/recoil/recoil-store/store";
 import { ref, update } from "@firebase/database";
+import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 
 export function useLogout() {
   const navigate = useNavigate();

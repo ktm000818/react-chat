@@ -3,6 +3,7 @@ import { ListGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/Button/InviteUserModalButton.module.scss";
+import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
 
 export default function Component(props: React.PropsWithChildren) {
   const [show, setShow] = useState(false);
@@ -40,7 +41,7 @@ export default function Component(props: React.PropsWithChildren) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={() => inviteUserToChatRoom('test', 'test')}>
             Save Changes
           </Button>
         </Modal.Footer>
