@@ -22,16 +22,22 @@ function Messages() {
     }
   };
 
+  async function initMessages() {
+    const res = await getAllMessageList(roomId);
+    setChatList(res);
+  }
+
   const moveScrollBottom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
     chatArea.scrollTo(0, chatArea.scrollHeight);
   };
 
   useEffect(() => {
-    async function initMessages() {
-      const res = await getAllMessageList(roomId);
-      setChatList(res);
-    }
+    if (!user) return;
+    initMessages();
+  }, []);
+
+  useEffect(() => {
     const messagesRef = ref(database, "chat/" + roomId);
     onChildAdded(messagesRef, () => {
       initMessages();
