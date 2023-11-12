@@ -1,6 +1,7 @@
 import { database } from "@/firebaseModule";
 import { equalTo, get, orderByChild, push, query, ref, set } from "firebase/database";
 import { Favorite } from "./favorites/actions";
+import { UserAuthState } from "@/types";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
@@ -87,27 +88,23 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
   await set(userRoomListRef, userRoomInfo);
 };
 
-export const inviteUserToChatRoom = async (user: string, roomId: string) => {
-  const auth = window.localStorage.getItem("recoil-persist");
+export const inviteUserToChatRoom = async (user: User, roomId: string) => {
+  const newUser = {
+    [user.uid]: {
+      image: user.image,
+      name: user.name,
+      superPermission: false,
+    },
+  };
+  const newUserRoom = {
+    roomId,
+    name: user.name,
+  };
+  const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
+  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
+  const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
 
-  if(!auth){
-    return;
-  }
-
-  console.log(JSON.parse(auth));  
-
-  // const newUser = {
-  //   [user.uid]: {
-  //     image: user.image,
-  //     name: user.name,
-  //     superPermission: false,
-  //   },
-  // };
-  // const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
-  // const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
-  // const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
-
-  // get(query(ref(database, `${CHATROOM}/${roomId}`)))
+  get(query(ref(database, `${CHATROOM}/${roomId}`)));
 
   // await push(roomListRef, newUser);
   // await push(userRoomListRef, newUser);
