@@ -8,13 +8,17 @@ import { useRecoilValue } from "recoil";
 
 function Messages() {
   const messageId = useId();
-  const containerRef = useRef<any>();
+  const containerRef = useRef<HTMLDivElement>(null);
   const user = useRecoilValue(userAuthState);
   const roomId = useRecoilValue(chatRoomIdState);
   const [chatList, setChatList] = useState<Message[]>([]);
 
-  const checkIsScrollButtom = () => {
+  const checkIsScrollBottom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
+    if (!chatArea) {
+      return false;
+    }
+
     if (Math.round(chatArea.clientHeight + chatArea.scrollTop) <= chatArea.scrollHeight) {
       return false;
     } else {
@@ -35,17 +39,17 @@ function Messages() {
   useEffect(() => {
     if (!user) return;
     initMessages();
-  }, []);
+  }, [roomId]);
 
   useEffect(() => {
     const messagesRef = ref(database, "chat/" + roomId);
     onChildAdded(messagesRef, () => {
       initMessages();
     });
-  }, [roomId, user]);
+  }, [roomId]);
 
   useEffect(() => {
-    if (!checkIsScrollButtom()) {
+    if (!checkIsScrollBottom()) {
       moveScrollBottom();
     }
   }, [chatList]);
