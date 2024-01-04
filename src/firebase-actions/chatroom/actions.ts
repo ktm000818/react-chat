@@ -87,24 +87,25 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
   await set(roomListRef, defaultRoomInfo);
   await set(userRoomListRef, userRoomInfo);
 };
-
-export const inviteUserToChatRoom = async (user: User, roomId: string) => {
-  const newUser = {
-    [user.uid]: {
-      image: user.image,
-      name: user.name,
-      superPermission: false,
-    },
-  };
-  const newUserRoom = {
-    roomId,
-    name: user.name,
-  };
-  const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
-  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
-  const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
+// user: User, roomId: string
+export const inviteUserToChatRoom = async (roomId: string) => {
+  // const newUser = {
+  //   [user.uid]: {
+  //     image: user.image,
+  //     name: user.name,
+  //     superPermission: false,
+  //   },
+  // };
+  // const newUserRoom = {
+  //   roomId,
+  //   name: user.name,
+  // };
+  // const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
+  // const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
+  // const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
 
   get(query(ref(database, `${CHATROOM}/${roomId}`)));
+  console.log((await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val())
 
   // await push(roomListRef, newUser);
   // await push(userRoomListRef, newUser);
