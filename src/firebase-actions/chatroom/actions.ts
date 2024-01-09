@@ -1,5 +1,5 @@
 import { database } from "@/firebaseModule";
-import { equalTo, get, orderByChild, push, query, ref, set } from "firebase/database";
+import { equalTo, get, orderByChild, push, query, ref, set, update } from "firebase/database";
 import { Favorite } from "./favorites/actions";
 import { UserAuthState } from "@/types";
 
@@ -46,7 +46,11 @@ export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatR
     return [];
   }
   try {
-    const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
+    const queryChatRoomOrderByCreatedAt = query(
+      ref(database, `${USER_CHATROOM}/${uid}`),
+      orderByChild("isFavorite"),
+      equalTo(false)
+    );
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
 
@@ -88,14 +92,7 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
   await set(userRoomListRef, userRoomInfo);
 };
 // user: User, roomId: string
-export const inviteUserToChatRoom = async (roomId: string) => {
-  // const newUser = {
-  //   [user.uid]: {
-  //     image: user.image,
-  //     name: user.name,
-  //     superPermission: false,
-  //   },
-  // };
+export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
   // const newUserRoom = {
   //   roomId,
   //   name: user.name,
@@ -103,9 +100,26 @@ export const inviteUserToChatRoom = async (roomId: string) => {
   // const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
   // const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
   // const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
+  console.log((await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val());
 
-  get(query(ref(database, `${CHATROOM}/${roomId}`)));
-  console.log((await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val())
+  const updates: any = {};
+
+  user.forEach(async (user, _) => {
+    const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}`);
+    await set(userRoomListRef, (await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val());
+
+    const newUser = {
+      image: user.image,
+      name: user.name,
+      uid: user.uid,
+      superPermission: false,
+    };
+
+    updates[`${CHATROOM}/${roomId}/members/${user.uid}`] = newUser;
+    updates[`${USER_CHATROOM}/${user.uid}/${roomId}/members`] = newUser;
+  });
+
+  update(ref(database), updates);
 
   // await push(roomListRef, newUser);
   // await push(userRoomListRef, newUser);
