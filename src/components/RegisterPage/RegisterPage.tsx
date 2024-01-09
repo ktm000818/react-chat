@@ -61,6 +61,7 @@ export default function RegisterPage() {
     set(ref(database, "users/" + createdUser.user.uid), {
       name: createdUser.user.displayName,
       image: createdUser.user.photoURL,
+      uid: createdUser.user.uid,
       isLogin: false,
     });
   };
@@ -79,8 +80,12 @@ export default function RegisterPage() {
 
         <label className={styles["label"]}>Password</label>
         <input className={styles["input"]} type="password" {...register("password", { required: true, minLength: 6 })} />
-        {errors.password && errors.password.type === "required" && <span className={styles["alert"]}>This field is required</span>}
-        {errors.password && errors.password.type === "minLength" && <span className={styles["alert"]}>password should be 6 characters at least.</span>}
+        {errors.password && errors.password.type === "required" && (
+          <span className={styles["alert"]}>This field is required</span>
+        )}
+        {errors.password && errors.password.type === "minLength" && (
+          <span className={styles["alert"]}>password should be 6 characters at least.</span>
+        )}
 
         <label className={styles["label"]}>Password Confirm</label>
         <input
@@ -91,8 +96,12 @@ export default function RegisterPage() {
             validate: (value) => value === password.current,
           })}
         />
-        {errors.passwordConfirm && errors.passwordConfirm.type === "required" && <span className={styles["alert"]}>This field is required</span>}
-        {errors.passwordConfirm && errors.passwordConfirm.type === "validate" && <span className={styles["alert"]}>wrong password. check again.</span>}
+        {errors.passwordConfirm && errors.passwordConfirm.type === "required" && (
+          <span className={styles["alert"]}>This field is required</span>
+        )}
+        {errors.passwordConfirm && errors.passwordConfirm.type === "validate" && (
+          <span className={styles["alert"]}>wrong password. check again.</span>
+        )}
 
         <Button className={styles["button-submit"]} type="submit" disabled={loading}>
           SUBMIT
