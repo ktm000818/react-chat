@@ -91,7 +91,7 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
   await set(roomListRef, defaultRoomInfo);
   await set(userRoomListRef, userRoomInfo);
 };
-// user: User, roomId: string
+
 export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
   const currentUserUid = auth.currentUser?.uid;
 
