@@ -95,28 +95,11 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
 export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
   const currentUserUid = auth.currentUser?.uid;
 
-  if(!currentUserUid){
+  if (!currentUserUid) {
     return false;
   }
-  // const newUserRoom = {
-  //   roomId,
-  //   name: user.name,
-  // };
-  // const roomListRef = ref(database, `${CHATROOM}/${roomId}/members`);
-  // const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
-  // const invitedUserRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}/members`);
-  console.log((await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val());
-
-  const updates: any = {};
 
   user.forEach(async (user, _) => {
-    const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}`);
-    const copiedRoomInfo = (await get(query(ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`)))).val();
-    copiedRoomInfo.isSuper = false;
-    copiedRoomInfo.isFavorite = false;
-
-    await set(userRoomListRef, copiedRoomInfo);
-
     const newUser = {
       image: user.image,
       name: user.name,
@@ -124,12 +107,26 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
       superPermission: false,
     };
 
-    updates[`${CHATROOM}/${roomId}/members/${user.uid}`] = newUser;
-    updates[`${USER_CHATROOM}/${user.uid}/${roomId}/members`] = newUser;
+    const chatRoomRef = ref(database, `${CHATROOM}/${roomId}`);
+    const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}`);
+    const currUserRoomListRef = ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`);
+
+    const copiedUserChatRoomInfo = (await get(query(ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`)))).val();
+    const copiedChatRoomInfo = (await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val();
+
+    const copiedUserChatRoominfoForCurrentUser = { ...copiedUserChatRoomInfo };
+    copiedUserChatRoominfoForCurrentUser.members[user.uid] = newUser;
+
+    const copiedUserChatRoominfoForTarget = { ...copiedUserChatRoomInfo };
+    copiedUserChatRoominfoForTarget.isSuper = false;
+    copiedUserChatRoominfoForTarget.isFavorite = false;
+    copiedUserChatRoominfoForTarget.members[user.uid] = newUser;
+
+    const copiedChatRoomInfoForUpdate = { ...copiedChatRoomInfo };
+    copiedChatRoomInfoForUpdate.members[user.uid] = newUser;
+
+    await set(chatRoomRef, copiedChatRoomInfoForUpdate);
+    await set(currUserRoomListRef, copiedUserChatRoominfoForCurrentUser);
+    await set(userRoomListRef, copiedUserChatRoominfoForTarget);
   });
-
-  await update(ref(database), updates);
-
-  // await push(roomListRef, newUser);
-  // await push(userRoomListRef, newUser);
 };
