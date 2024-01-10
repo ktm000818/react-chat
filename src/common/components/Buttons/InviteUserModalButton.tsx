@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/Button/InviteUserModalButton.module.scss";
 import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
-import { User, UserList, getUserList } from "@/firebase-actions/user/actions";
+import { User, UserList, getUserListExceptCurrentUser } from "@/firebase-actions/user/actions";
 
 interface InviteUserModalButton {
   chatRoomId: string;
@@ -19,7 +19,7 @@ export default function Component({ chatRoomId, children }: InviteUserModalButto
 
   const handleClose = () => setShow(false);
   const handleShow = async () => {
-    setUserList(await getUserList());
+    setUserList(await getUserListExceptCurrentUser());
     setShow(true);
   };
 
