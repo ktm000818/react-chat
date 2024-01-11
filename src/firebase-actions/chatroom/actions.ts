@@ -83,7 +83,7 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
     roomId: NEW_ROOM_ID,
     // isFavorite: false,
   };
-  const userRoomInfo = { ...defaultRoomInfo, isSuper: true };
+  const userRoomInfo = { ...defaultRoomInfo, isSuper: true, isFavorite: false };
 
   const roomListRef = ref(database, `${CHATROOM}/${NEW_ROOM_ID}`);
   const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`);
