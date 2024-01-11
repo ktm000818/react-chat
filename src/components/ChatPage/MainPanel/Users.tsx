@@ -20,7 +20,7 @@ export default function Users() {
 
   useEffect(() => {
     initMemberList();
-  }, []);
+  }, [chatRoomId]);
 
   const initMemberList = async () => {
     setMemberList(await getMemberList());
@@ -38,8 +38,13 @@ export default function Users() {
 
   return (
     <div className={styles["container"]}>
-      {memberList.map((v) => (
-        <div>{v.name}</div>
+      {memberList.map((member, i) => (
+        <div key={`${member.uid}_${i}`} className={styles["member-card"]}>
+          <div className={styles["member-image-wrapper"]}>
+            <img src={member.image} alt="" width={35} height={35} />
+          </div>
+          <span className={styles["member-name"]}>{member.name}</span>
+        </div>
       ))}
     </div>
   );
