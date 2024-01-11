@@ -35,8 +35,8 @@ export default function RegisterPage() {
       const { email, password } = data;
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async (user) => {
-          await setUserOnDB(user);
           await updateUserProfile(data);
+          await setUserOnDB(user);
           navigate("/login");
         })
         .catch((e) => {
