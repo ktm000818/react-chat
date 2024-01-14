@@ -1,7 +1,7 @@
 import { database } from "@/firebaseModule";
 import { chatRoomIdState } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/Users.module.scss";
-import { get, query, ref } from "firebase/database";
+import { get, onChildAdded, onChildChanged, onChildRemoved, query, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
@@ -20,6 +20,9 @@ export default function Users() {
 
   useEffect(() => {
     initMemberList();
+    onChildAdded(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
+    onChildRemoved(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
+    onChildChanged(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
   }, [chatRoomId]);
 
   const initMemberList = async () => {
