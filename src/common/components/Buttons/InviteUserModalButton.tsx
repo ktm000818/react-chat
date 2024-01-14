@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Form, ListGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -15,24 +15,26 @@ export default function Component({ chatRoomId, children }: InviteUserModalButto
   const [show, setShow] = useState<boolean>(false);
   const [userList, setUserList] = useState<UserList>({});
   const [selectedUserList, setSelectedUserList] = useState<Array<User>>([]);
+  const memberMapRef = useRef(new Map());
   const rid = useId();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    memberMapRef.current.clear();
+    setShow(false);
+  };
   const handleShow = async () => {
     setUserList(await getUserListExceptCurrentUser());
     setShow(true);
   };
 
   const addAndRemoveUser = (user: User) => {
-    function getDuplicateUserIndex() {
-      return selectedUserList.findIndex((v) => v.uid === user.uid);
+    if (memberMapRef.current.get(user.uid)) {
+      memberMapRef.current.delete(user.uid);
+    } else {
+      memberMapRef.current.set(user.uid, user);
     }
 
-    if (getDuplicateUserIndex() > -1) {
-      setSelectedUserList([...selectedUserList].splice(getDuplicateUserIndex(), 1));
-    } else {
-      setSelectedUserList((prev) => [...prev, user]);
-    }
+    setSelectedUserList(Array.from(memberMapRef.current.values()));
   };
 
   return (
@@ -48,10 +50,17 @@ export default function Component({ chatRoomId, children }: InviteUserModalButto
         <Modal.Body>
           <ListGroup className={styles["list-group"]}>
             {Object.values(userList).map((user, i) => (
-              <ListGroup.Item action key={`${rid}_${i}`}>
-                <label className={styles["list-group-item"]} onClick={() => addAndRemoveUser(user)}>
+              <ListGroup.Item action key={`${rid}_${user.uid}`}>
+                <div className={styles["list-group-item"]} onClick={() => addAndRemoveUser(user)}>
                   <div className={styles["list-group-item-checkbox-wrapper"]}>
-                    <Form.Check inline name="group1" type={"checkbox"} />
+                    <Form.Check
+                      id="list-group-item-checkbox"
+                      inline
+                      name="group1"
+                      type={"checkbox"}
+                      readOnly
+                      checked={Boolean(selectedUserList.find((v) => v.uid === user.uid))}
+                    />
                   </div>
                   <div className={styles["list-group-item-image"]}>
                     <img src={user.image} alt=" " width={50} height={50} />
@@ -60,7 +69,7 @@ export default function Component({ chatRoomId, children }: InviteUserModalButto
                     <div className={styles["list-group-item-name"]}>{user.name}</div>
                     <div className={styles["list-group-item-desc"]}></div>
                   </div>
-                </label>
+                </div>
               </ListGroup.Item>
             ))}
           </ListGroup>

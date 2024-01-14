@@ -1,7 +1,6 @@
 import { auth, database } from "@/firebaseModule";
-import { equalTo, get, orderByChild, push, query, ref, set, update } from "firebase/database";
+import { equalTo, get, orderByChild, query, ref, set, update } from "firebase/database";
 import { Favorite } from "./favorites/actions";
-import { UserAuthState } from "@/types";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
@@ -81,14 +80,14 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
       },
     },
     roomId: NEW_ROOM_ID,
-    // isFavorite: false,
   };
+
   const userRoomInfo = { ...defaultRoomInfo, isSuper: true, isFavorite: false };
 
   const roomListRef = ref(database, `${CHATROOM}/${NEW_ROOM_ID}`);
-  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`);
-
   await set(roomListRef, defaultRoomInfo);
+
+  const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${NEW_ROOM_ID}`);
   await set(userRoomListRef, userRoomInfo);
 };
 
@@ -99,6 +98,10 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
     return false;
   }
 
+  const updates: any = {};
+  const copiedUserChatRoomInfo = (await get(query(ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`)))).val();
+  const copiedChatRoomInfo = (await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val();
+
   user.forEach(async (user, _) => {
     const newUser = {
       image: user.image,
@@ -106,13 +109,6 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
       uid: user.uid,
       superPermission: false,
     };
-
-    const chatRoomRef = ref(database, `${CHATROOM}/${roomId}`);
-    const userRoomListRef = ref(database, `${USER_CHATROOM}/${user.uid}/${roomId}`);
-    const currUserRoomListRef = ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`);
-
-    const copiedUserChatRoomInfo = (await get(query(ref(database, `${USER_CHATROOM}/${currentUserUid}/${roomId}`)))).val();
-    const copiedChatRoomInfo = (await get(query(ref(database, `${CHATROOM}/${roomId}`)))).val();
 
     const copiedUserChatRoominfoForCurrentUser = { ...copiedUserChatRoomInfo };
     copiedUserChatRoominfoForCurrentUser.members[user.uid] = newUser;
@@ -125,8 +121,11 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
     const copiedChatRoomInfoForUpdate = { ...copiedChatRoomInfo };
     copiedChatRoomInfoForUpdate.members[user.uid] = newUser;
 
-    await set(chatRoomRef, copiedChatRoomInfoForUpdate);
-    await set(currUserRoomListRef, copiedUserChatRoominfoForCurrentUser);
-    await set(userRoomListRef, copiedUserChatRoominfoForTarget);
+    updates[`${CHATROOM}/${roomId}`] = copiedChatRoomInfoForUpdate;
+    updates[`${USER_CHATROOM}/${user.uid}/${roomId}`] = copiedUserChatRoominfoForTarget;
+    updates[`${USER_CHATROOM}/${currentUserUid}/${roomId}`] = copiedUserChatRoominfoForCurrentUser;
   });
+
+  console.log(updates);
+  await update(ref(database), updates);
 };

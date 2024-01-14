@@ -17,14 +17,14 @@ export interface UserList {
 export const getUserList: () => Promise<UserList> = async () => {
   const userList = await get(query(ref(database, `${TABLE}`)));
   if (userList.exists()) {
-    return userList.val();  
+    return userList.val();
   } else {
     return [];
   }
 };
 
 export const getUserListExceptCurrentUser: () => Promise<UserList> = async () => {
-  if(!auth.currentUser?.uid){
+  if (!auth.currentUser?.uid) {
     return [];
   }
 
@@ -32,7 +32,7 @@ export const getUserListExceptCurrentUser: () => Promise<UserList> = async () =>
 
   const userList = await get(query(ref(database, `${TABLE}`)));
   if (userList.exists()) {
-    const userListExceptCurrentUser = {...userList.val()};
+    const userListExceptCurrentUser = { ...userList.val() };
     delete userListExceptCurrentUser[currentUid];
 
     return userListExceptCurrentUser;
@@ -40,4 +40,3 @@ export const getUserListExceptCurrentUser: () => Promise<UserList> = async () =>
     return [];
   }
 };
-
