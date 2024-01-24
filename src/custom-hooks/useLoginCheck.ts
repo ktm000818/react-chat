@@ -15,12 +15,14 @@ export default function useLoginCheck() {
   useEffect(() => {
     if (user) {
       if (!ACCESS_PAGES.includes(currLocation)) {
+        window.location.replace("/");
         navigate("/");
       }
     } else {
       if (!ACCESS_PAGES_FOR_UNKNOWN.includes(currLocation)) {
+        window.location.replace("/");
         navigate("/");
       }
     }
-  }, [ACCESS_PAGES, ACCESS_PAGES_FOR_UNKNOWN, currLocation, navigate, user]);
+  }, [user]);
 }
