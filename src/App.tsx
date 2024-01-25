@@ -23,7 +23,7 @@ export default function App() {
   );
 }
 
-const useInitiateUserAuth = () => {
+const useObserveUserAuth = () => {
   const setUserAuthState = useSetRecoilState(userAuthState);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const useInitiateUserAuth = () => {
 };
 
 const ChatApp = () => {
-  useInitiateUserAuth();
+  useObserveUserAuth();
 
   const router = createBrowserRouter([
     {
