@@ -17,7 +17,9 @@ const Body = () => (
   </>
 );
 
-const HOCBody = withChatRoomInfoComponent(Body, () => <div>안녕하세요</div>);
+const HOCBody = withChatRoomInfoComponent(Body, () => (
+  <div className={styles["no-room-body"]}>방을 생성하거나 참여해주세요!</div>
+));
 
 function MainPanel() {
   return (
