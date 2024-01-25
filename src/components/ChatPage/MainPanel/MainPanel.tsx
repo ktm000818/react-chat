@@ -1,21 +1,9 @@
-import { chatRoomInfoState } from "@/recoil/recoil-store/store";
+import { withChatRoomInfoComponent } from "@/hoc";
 import styles from "@styles/Chat/MainPanel/MainPanel.module.scss";
-import { useRecoilValue } from "recoil";
 import Messages from "./Message";
 import MessageForm from "./MessageForm";
 import MessagesHeader from "./MessageHeader";
 import Users from "./Users";
-import { ComponentType } from "react";
-
-const withChatRoomInfoComponent = (Component: ComponentType, ReplacementComponent: ComponentType) => {
-  return function () {
-    const chatRoomInfo = useRecoilValue(chatRoomInfoState);
-
-    if (!chatRoomInfo.roomId) return <ReplacementComponent />;
-
-    return <Component />;
-  };
-};
 
 const Body = () => (
   <>

@@ -5,6 +5,7 @@ import styles from "@styles/Chat/MainPanel/MessageHeader.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import UserPanel from "./UserPanel";
+import { withChatRoomInfoComponent } from "@/hoc";
 
 function MessagesHeader() {
   const user = useRecoilValue(userAuthState);
@@ -39,9 +40,13 @@ function MessagesHeader() {
   return (
     <div className={styles["container"]}>
       <div className={styles["title-wrapper"]}>
-        <span className={styles["title"]}>{chatRoomInfo.roomName}</span>
-        <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
-        <InviteUserModalButton chatRoomId={chatRoomInfo.roomId}>초대</InviteUserModalButton>
+        {chatRoomInfo.roomId && (
+          <>
+            <span className={styles["title"]}>{chatRoomInfo.roomName}</span>
+            <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
+            <InviteUserModalButton chatRoomId={chatRoomInfo.roomId}>초대</InviteUserModalButton>
+          </>
+        )}
       </div>
       <UserPanel />
     </div>
