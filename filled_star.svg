@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <path id="iconFavoriteOn" d="M12 17.5l-5.29 2.781 1.01-5.89-4.28-4.172 5.915-.86L12 4l2.645 5.36 5.915.859-4.28 4.172 1.01 5.89z"></path>
+    </defs>
+    <use fill="#ffb900" fill-rule="nonzero" xlink:href="#iconFavoriteOn"></use>
+</svg>

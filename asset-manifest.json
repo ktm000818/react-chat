@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rchat/static/css/main.0a81f428.css",
+    "main.js": "/rchat/static/js/main.be5dcc67.js",
+    "static/js/787.890e5f70.chunk.js": "/rchat/static/js/787.890e5f70.chunk.js",
+    "index.html": "/rchat/index.html",
+    "main.0a81f428.css.map": "/rchat/static/css/main.0a81f428.css.map",
+    "main.be5dcc67.js.map": "/rchat/static/js/main.be5dcc67.js.map",
+    "787.890e5f70.chunk.js.map": "/rchat/static/js/787.890e5f70.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0a81f428.css",
+    "static/js/main.be5dcc67.js"
+  ]
+}
