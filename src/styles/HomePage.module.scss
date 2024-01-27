@@ -1,9 +1,15 @@
 .container {
   font-family: var(--font-sc-dream6);
   // background: url("../../public/background/homepage-background.png");
-  background: #6190e8; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #a7bfe8, #6190e8); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #a7bfe8, #6190e8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    45deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(43, 69, 96, 1) 30%,
+    rgba(47, 120, 153, 1) 58%,
+    rgba(28, 148, 190, 1) 83%,
+    rgba(0, 212, 255, 1) 100%
+  );
 
   background-size: cover;
   width: 100vw;
@@ -24,7 +30,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(179, 198, 252);
+  background-color: rgba(0, 0, 0, 0.19);
   color: rgb(255, 255, 255);
   text-shadow: 2px 1px 2px black;
 }

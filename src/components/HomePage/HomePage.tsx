@@ -20,7 +20,11 @@ export default function App() {
       </div>
       <div className={styles["title-wrapper"]}>
         <img src="logo/logo_transparent.png" width={300} height={300} alt="title-logo"></img>
-        {userAuth && <Button onClick={() => navigate("/chat")}>Start Chat</Button>}
+        {userAuth && (
+          <Button variant="primary" onClick={() => navigate("/chat")}>
+            Start Chat
+          </Button>
+        )}
       </div>
     </div>
   );
