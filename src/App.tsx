@@ -40,7 +40,7 @@ const ChatApp = () => {
 
   const router = createHashRouter([
     {
-      path: "/react-chat",
+      path: "/",
       element: <HomePage />,
     },
     {

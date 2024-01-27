@@ -1,6 +1,6 @@
 {
   "name": "react-chat",
-  "homepage": "https://ktm000818.github.io/react-chat",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
