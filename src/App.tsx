@@ -3,7 +3,7 @@ import LoginPage from "@components/LoginPage/LoginPage";
 import RegisterPage from "@components/RegisterPage/RegisterPage";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import { RouterProvider, createHashRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import ChatPage from "./components/ChatPage/ChatPage";
 import { useUpdateKey } from "./custom-hooks/useUpdateKey";
@@ -38,7 +38,7 @@ const useObserveUserAuth = () => {
 const ChatApp = () => {
   useObserveUserAuth();
 
-  const router = createHashRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <HomePage />,
