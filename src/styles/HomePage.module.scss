@@ -18,9 +18,15 @@
 }
 
 .title-wrapper {
-  position: absolute;
-  top: 200px;
-  left: 400px;
+  width: 400px;
+  height: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+
+  img {
+    margin: auto;
+  }
 }
 
 .header {
