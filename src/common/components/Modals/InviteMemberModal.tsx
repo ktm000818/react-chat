@@ -41,29 +41,33 @@ export default function InviteMemberModal({ open = false, handleCloseModal = () 
       </Modal.Header>
       <Modal.Body>
         <ListGroup className={styles["list-group"]}>
-          {Object.values(userList).map((user, i) => (
-            <ListGroup.Item action key={`${rid}_${user.uid}`}>
-              <div className={styles["list-group-item"]} onClick={() => addAndRemoveUser(user)}>
-                <div className={styles["list-group-item-checkbox-wrapper"]}>
-                  <Form.Check
-                    id="list-group-item-checkbox"
-                    inline
-                    name="group1"
-                    type={"checkbox"}
-                    readOnly
-                    checked={Boolean(selectedUserList.find((v) => v.uid === user.uid))}
-                  />
+          {Object.values(userList).length > 0 ? (
+            Object.values(userList).map((user, i) => (
+              <ListGroup.Item action key={`${rid}_${user.uid}`}>
+                <div className={styles["list-group-item"]} onClick={() => addAndRemoveUser(user)}>
+                  <div className={styles["list-group-item-checkbox-wrapper"]}>
+                    <Form.Check
+                      id="list-group-item-checkbox"
+                      inline
+                      name="group1"
+                      type={"checkbox"}
+                      readOnly
+                      checked={Boolean(selectedUserList.find((v) => v.uid === user.uid))}
+                    />
+                  </div>
+                  <div className={styles["list-group-item-image"]}>
+                    <img src={user.image} alt=" " width={50} height={50} />
+                  </div>
+                  <div className={styles["list-group-item-info-wrapper"]}>
+                    <div className={styles["list-group-item-name"]}>{user.name}</div>
+                    <div className={styles["list-group-item-desc"]}></div>
+                  </div>
                 </div>
-                <div className={styles["list-group-item-image"]}>
-                  <img src={user.image} alt=" " width={50} height={50} />
-                </div>
-                <div className={styles["list-group-item-info-wrapper"]}>
-                  <div className={styles["list-group-item-name"]}>{user.name}</div>
-                  <div className={styles["list-group-item-desc"]}></div>
-                </div>
-              </div>
-            </ListGroup.Item>
-          ))}
+              </ListGroup.Item>
+            ))
+          ) : (
+            <div>There is no one can invite!</div>
+          )}
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
