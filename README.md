@@ -1,6 +1,6 @@
 < ReactChat />
 =============
-you can check below url to visit react-chat homepage.  
+you can check below url to visit react-chat homepage by vercel.  
 https://react-chat-five-mauve.vercel.app/
 
 MAIN STACK
