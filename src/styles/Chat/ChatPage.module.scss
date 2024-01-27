@@ -3,8 +3,19 @@
 }
 
 .side-wrapper {
-  max-width: 250px;
-  min-width: 250px;
+  min-height: 100vh;
+  transition: width 1s;
+  background-color: #2c2c2c;
+  &.hide {
+    transition: width 1s;
+    width: 80px;
+  }
+}
+
+.nav {
+  display: flex;
+  justify-content: end;
+  margin: 10px;
 }
 
 .main-wrapper {
@@ -15,12 +26,32 @@
 
 @include mobile {
   .side-wrapper {
-    display: none;
+    width: 200px;
+    &.hide {
+      transition: none;
+      width: 80px;
+    }
   }
 }
 
 @include tablet {
+  .side-wrapper {
+    width: 200px;
+    &.hide {
+      transition: none;
+      width: 80px;
+    }
+  }
 }
 
 @include desktop {
+  .side-wrapper {
+    width: 300px;
+    &.hide {
+      transition: width 1s;
+      width: 80px;
+    }
+  }
 }
+
+//TODO 반응형

@@ -1,7 +1,9 @@
 .title-container {
+  width: 150px;
   padding: 10px;
-  display: flex;
-  align-items: baseline;
+  * {
+    display: inline;
+  }
 }
 
 .room-container {

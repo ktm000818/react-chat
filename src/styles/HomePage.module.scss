@@ -1,3 +1,24 @@
+@import "./Environment/Environment.scss";
+@import "./Environment/variables";
+
+@include mobile {
+  .title-wrapper {
+    width: calc(#{$breakpoint-mobile} - 50px);
+  }
+}
+
+@include tablet {
+  .title-wrapper {
+    width: calc(#{$breakpoint-tablet} - 100px);
+  }
+}
+
+@include desktop {
+  .title-wrapper {
+    width: 400px;
+  }
+}
+
 .container {
   font-family: var(--font-sc-dream6);
   // background: url("../../public/background/homepage-background.png");
@@ -18,7 +39,7 @@
 }
 
 .title-wrapper {
-  width: 400px;
+  // width: 400px;
   height: 300px;
   margin: auto;
   display: flex;
