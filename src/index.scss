@@ -3,4 +3,8 @@ body {
   padding: 0;
 }
 
-@import "~bootstrap/scss/bootstrap";
+$primary: #176ab1;
+$secondary: #4c7599;
+$danger: #ff4136;
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
