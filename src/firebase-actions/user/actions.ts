@@ -1,7 +1,8 @@
 import { auth, database } from "@/firebaseModule";
 import { get, query, ref } from "firebase/database";
 
-const TABLE = "users";
+const USERS = "users";
+const USER_CHATROOM = "user_chatroom";
 
 export interface User {
   image: string;
@@ -15,7 +16,7 @@ export interface UserList {
 }
 
 export const getUserList: () => Promise<UserList> = async () => {
-  const userList = await get(query(ref(database, `${TABLE}`)));
+  const userList = await get(query(ref(database, `${USERS}`)));
   if (userList.exists()) {
     return userList.val();
   } else {
@@ -23,20 +24,31 @@ export const getUserList: () => Promise<UserList> = async () => {
   }
 };
 
-export const getUserListExceptCurrentUser: () => Promise<UserList> = async () => {
-  if (!auth.currentUser?.uid) {
-    return [];
-  }
-
+const getMemberList: (roomId: string) => Promise<UserList> = async (roomId) => {
   const currentUid = auth.currentUser?.uid;
-
-  const userList = await get(query(ref(database, `${TABLE}`)));
-  if (userList.exists()) {
-    const userListExceptCurrentUser = { ...userList.val() };
-    delete userListExceptCurrentUser[currentUid];
-
-    return userListExceptCurrentUser;
+  const memberList = await get(query(ref(database, `${USER_CHATROOM}/${currentUid}/${roomId}/members`)));
+  if (memberList.exists()) {
+    return memberList.val();
   } else {
     return [];
   }
+};
+
+export const getUserListExceptChatroomMemberAndCurrUser: (roomId: string) => Promise<UserList> = async (roomId) => {
+  const currentUid = auth.currentUser?.uid;
+
+  if (!currentUid) {
+    return {};
+  }
+
+  const userListExceptCurrentUser = { ...(await getUserList()) };
+  const memberListExceptCurrentUser = { ...(await getMemberList(roomId)) };
+
+  Object.keys(memberListExceptCurrentUser).forEach((uid) => {
+    if (userListExceptCurrentUser[uid]) {
+      delete userListExceptCurrentUser[uid];
+    }
+  });
+
+  return userListExceptCurrentUser;
 };
