@@ -1,14 +1,35 @@
+@import "./Environment/Environment.scss";
+@import "./Environment/variables";
+
+@include mobile {
+  .form {
+    min-width: calc(#{$breakpoint-mobile} - 50px);
+  }
+}
+
+@include tablet {
+  .form {
+    min-width: calc(#{$breakpoint-tablet} - 100px);
+  }
+}
+
+@include desktop {
+  .form {
+    min-width: 400px;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100vh;
   background: whitesmoke;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
 }
 
 .form {
-  min-width: 400px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
