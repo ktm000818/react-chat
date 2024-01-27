@@ -1,8 +1,10 @@
-import { User, UserList, getUserListExceptCurrentUser } from "@/firebase-actions/user/actions";
+import { User, UserList, getUserListExceptChatroomMemberAndCurrUser } from "@/firebase-actions/user/actions";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button, Form, ListGroup, Modal } from "react-bootstrap";
 import styles from "@styles/Modal/InviteMemberModal.module.scss";
 import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
+import { useRecoilValue } from "recoil";
+import { chatRoomIdState } from "@/recoil/recoil-store/store";
 
 export default function InviteMemberModal({ open = false, handleCloseModal = () => {}, chatRoomId = "" }) {
   const [userList, setUserList] = useState<UserList>({});
@@ -20,16 +22,22 @@ export default function InviteMemberModal({ open = false, handleCloseModal = () 
     setSelectedUserList(Array.from(memberMapRef.current.values()));
   };
 
-  const initiateUserList = async () => setUserList(await getUserListExceptCurrentUser());
+  const initiateUserList = async () => setUserList(await getUserListExceptChatroomMemberAndCurrUser(chatRoomId));
+
+  const closeModal = () => {
+    handleCloseModal();
+    memberMapRef.current.clear();
+    setSelectedUserList([]);
+  };
 
   useEffect(() => {
-    initiateUserList();
-  });
+    if (open) initiateUserList();
+  }, [open]);
 
   return (
     <Modal show={open} onHide={handleCloseModal} size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>친구를 초대해보세요!</Modal.Title>
+        <Modal.Title>Invite</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <ListGroup className={styles["list-group"]}>
@@ -59,10 +67,16 @@ export default function InviteMemberModal({ open = false, handleCloseModal = () 
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>
+        <Button variant="secondary" onClick={closeModal}>
           Close
         </Button>
-        <Button variant="primary" onClick={() => inviteUserToChatRoom(selectedUserList, chatRoomId)}>
+        <Button
+          variant="primary"
+          onClick={() => {
+            inviteUserToChatRoom(selectedUserList, chatRoomId);
+            closeModal();
+          }}
+        >
           Save Changes
         </Button>
       </Modal.Footer>
