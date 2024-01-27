@@ -29,8 +29,8 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
     };
     await addChatRoom(data);
 
-    alert("채팅방 생성 완료!");
     close();
+    alert("채팅방 생성 완료!");
   };
 
   return (
@@ -47,7 +47,13 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" rows={6} type="text" placeholder="description" onChange={({ target }) => setDescription(target.value)} />
+              <Form.Control
+                as="textarea"
+                rows={6}
+                type="text"
+                placeholder="description"
+                onChange={({ target }) => setDescription(target.value)}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
