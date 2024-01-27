@@ -43,7 +43,12 @@ function MessagesHeader() {
         {chatRoomInfo.roomId && (
           <>
             <span className={styles["title"]}>{chatRoomInfo.roomName}</span>
-            <img src={isFavorite ? "filled_star.svg" : "star.svg"} alt="favorite" onClick={toggleFavorite} />
+            <img
+              className={styles["favorite-img"]}
+              src={isFavorite ? "filled_star.svg" : "star.svg"}
+              alt="favorite"
+              onClick={toggleFavorite}
+            />
             <InviteUserModalButton chatRoomId={chatRoomInfo.roomId}>Invite</InviteUserModalButton>
           </>
         )}
