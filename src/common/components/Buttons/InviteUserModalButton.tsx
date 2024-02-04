@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import InviteMemberModal from "../Modals/InviteMemberModal";
 
-interface InviteUserModalButton {
+interface Props {
   chatRoomId: string;
   children: React.ReactNode;
 }
 
-export default function Component({ chatRoomId, children }: InviteUserModalButton) {
+export default function Component({ chatRoomId, children }: Props) {
   const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => {

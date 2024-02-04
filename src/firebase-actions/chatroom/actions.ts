@@ -17,11 +17,8 @@ export interface AddChatRoom {
   user: User;
 }
 
-interface Member {
-  image: string;
-  name: string;
+interface Member extends User {
   superPermission: boolean;
-  uid: string;
 }
 
 interface Members {
@@ -45,11 +42,7 @@ export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatR
     return [];
   }
   try {
-    const queryChatRoomOrderByCreatedAt = query(
-      ref(database, `${USER_CHATROOM}/${uid}`),
-      orderByChild("isFavorite"),
-      equalTo(false)
-    );
+    const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
 
@@ -110,22 +103,17 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
       superPermission: false,
     };
 
-    const copiedUserChatRoominfoForCurrentUser = { ...copiedUserChatRoomInfo };
-    copiedUserChatRoominfoForCurrentUser.members[user.uid] = newUser;
-
+    const copiedUserChatRoominfoForCurrentUser = ({ ...copiedUserChatRoomInfo }.members[user.uid] = newUser);
     const copiedUserChatRoominfoForTarget = { ...copiedUserChatRoomInfo };
     copiedUserChatRoominfoForTarget.isSuper = false;
     copiedUserChatRoominfoForTarget.isFavorite = false;
     copiedUserChatRoominfoForTarget.members[user.uid] = newUser;
-
-    const copiedChatRoomInfoForUpdate = { ...copiedChatRoomInfo };
-    copiedChatRoomInfoForUpdate.members[user.uid] = newUser;
+    const copiedChatRoomInfoForUpdate = ({ ...copiedChatRoomInfo }.members[user.uid] = newUser);
 
     updates[`${CHATROOM}/${roomId}`] = copiedChatRoomInfoForUpdate;
     updates[`${USER_CHATROOM}/${user.uid}/${roomId}`] = copiedUserChatRoominfoForTarget;
     updates[`${USER_CHATROOM}/${currentUserUid}/${roomId}`] = copiedUserChatRoominfoForCurrentUser;
   });
 
-  console.log(updates);
   await update(ref(database), updates);
 };

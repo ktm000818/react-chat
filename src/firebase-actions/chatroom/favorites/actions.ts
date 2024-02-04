@@ -5,10 +5,7 @@ const FAVORITES = "favorites";
 const USER_FAVORITES = "user_favorites";
 const USER_CHATROOM = "user_chatroom";
 
-type FavoriteAddProps = (uid: string, room: { roomId: string }) => Promise<void>;
-type FavoriteRemoveProps = (uid: string, roomId: string) => Promise<void>;
 type ChangingIsFavoriteFuncProps = (uid: string, roomId: string, flag: boolean) => Promise<void>;
-
 const changeIsFavoritePropertieOfChatRoom: ChangingIsFavoriteFuncProps = async (uid, roomId, flag) => {
   const dbRef = ref(database);
 
@@ -17,6 +14,7 @@ const changeIsFavoritePropertieOfChatRoom: ChangingIsFavoriteFuncProps = async (
   await update(dbRef, updates);
 };
 
+type FavoriteAddProps = (uid: string, room: { roomId: string }) => Promise<void>;
 export const addFavorite: FavoriteAddProps = async (uid, room) => {
   const favoritesRef = ref(database, `${FAVORITES}`);
   const userFavoritesRef = ref(database, `${USER_FAVORITES}/${uid}/${room.roomId}`);
@@ -29,6 +27,7 @@ export const addFavorite: FavoriteAddProps = async (uid, room) => {
   await changeIsFavoritePropertieOfChatRoom(uid, room.roomId, true);
 };
 
+type FavoriteRemoveProps = (uid: string, roomId: string) => Promise<void>;
 export const removeFavorite: FavoriteRemoveProps = async (uid, roomId) => {
   if (!uid || !roomId) {
     return;
@@ -92,7 +91,7 @@ interface Favorites {
   [key: string]: Favorite;
 }
 
-export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[] | null> = async (uid) => {
+export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[] | never[]> = async (uid) => {
   if (!uid) {
     return [];
   }
@@ -104,10 +103,10 @@ export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[] 
     if (result.exists()) {
       return Object.values(resultVal);
     } else {
-      return null;
+      return [];
     }
   } catch (error) {
-    return null;
+    return [];
   }
 };
 
@@ -115,7 +114,6 @@ export const getIsFavoriteByRoomId: (uid: string, roomId: string) => Promise<boo
   try {
     const dbRef = ref(database);
     const result = await get(child(dbRef, `${USER_FAVORITES}/${uid}`));
-
     const resultVal = await result.val();
 
     if (result.exists()) {

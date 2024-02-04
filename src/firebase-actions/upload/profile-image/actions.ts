@@ -5,7 +5,6 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const FOLDER_NAME = "profile-image";
 
-//create docs
 export const updateProfileImageToStorageAndDatabase: (file: any) => Promise<string | null> = async (file) => {
   try {
     if (!auth.currentUser) throw new Error("error");

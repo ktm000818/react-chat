@@ -1,5 +1,4 @@
 import { useLogout } from "@/custom-hooks/useLogout";
-import { auth } from "@/firebaseModule";
 import { userAuthState } from "@/recoil/recoil-store/store";
 import styles from "@styles/MainNavigation.module.scss";
 import Button from "react-bootstrap/Button";

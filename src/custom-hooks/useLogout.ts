@@ -11,18 +11,21 @@ export function useLogout() {
   const user = useRecoilValue(userAuthState);
   const resetRecoilStates = useUpdateRecoilRootKey();
 
-  const updateLoginStateToFalse = async () => {
+  const updateLoginStateToFalse: () => void = async () => {
     if (!user) {
       return;
     }
 
     const dbRef = ref(database);
-    const updates: any = {};
-    updates[`users/${user.uid}/isLogin`] = false;
+
+    const updates = {
+      [`users/${user.uid}/isLogin`]: false,
+    };
+
     await update(dbRef, updates);
   };
 
-  const logout = () => {
+  const logout: () => void = () => {
     if (!user) return;
     signOut(auth)
       .then(() => {
