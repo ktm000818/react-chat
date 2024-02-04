@@ -14,10 +14,11 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleClickAdd = async () => {
+  const handleClickAdd: () => void = async () => {
     if (!user || !user?.uid || !user?.displayName || !user?.photoURL) {
-      return false;
+      return;
     }
+
     const data: AddChatRoom = {
       roomName: roomName,
       description: description,
@@ -47,13 +48,7 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={6}
-                type="text"
-                placeholder="description"
-                onChange={({ target }) => setDescription(target.value)}
-              />
+              <Form.Control as="textarea" rows={6} type="text" placeholder="description" onChange={({ target }) => setDescription(target.value)} />
             </Form.Group>
           </Form>
         </Modal.Body>

@@ -1,18 +1,16 @@
+import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
 import { User, UserList, getUserListExceptChatroomMemberAndCurrUser } from "@/firebase-actions/user/actions";
+import styles from "@styles/Modal/InviteMemberModal.module.scss";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button, Form, ListGroup, Modal } from "react-bootstrap";
-import styles from "@styles/Modal/InviteMemberModal.module.scss";
-import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
-import { useRecoilValue } from "recoil";
-import { chatRoomIdState } from "@/recoil/recoil-store/store";
 
 export default function InviteMemberModal({ open = false, handleCloseModal = () => {}, chatRoomId = "" }) {
   const [userList, setUserList] = useState<UserList>({});
   const [selectedUserList, setSelectedUserList] = useState<Array<User>>([]);
-  const memberMapRef = useRef(new Map());
+  const memberMapRef = useRef(new Map<string, User>());
   const rid = useId();
 
-  const addAndRemoveUser = (user: User) => {
+  const addAndRemoveUser: (user: User) => void = (user) => {
     if (memberMapRef.current.get(user.uid)) {
       memberMapRef.current.delete(user.uid);
     } else {
@@ -22,9 +20,9 @@ export default function InviteMemberModal({ open = false, handleCloseModal = () 
     setSelectedUserList(Array.from(memberMapRef.current.values()));
   };
 
-  const initiateUserList = async () => setUserList(await getUserListExceptChatroomMemberAndCurrUser(chatRoomId));
+  const initiateUserList: () => Promise<void> = async () => setUserList(await getUserListExceptChatroomMemberAndCurrUser(chatRoomId));
 
-  const closeModal = () => {
+  const closeModal: () => void = () => {
     handleCloseModal();
     memberMapRef.current.clear();
     setSelectedUserList([]);
