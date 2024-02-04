@@ -11,7 +11,7 @@ export default function ChatPage() {
 
   return (
     <div className={styles["container"]}>
-      <div className={`${styles[`side-wrapper`]} ${hide ? styles[`hide`] : styles[``]}`}>
+      <div className={`${styles["side-wrapper"]} ${hide ? styles["hide"] : styles[""]}`}>
         <div className={styles["nav"]}>
           <Button onClick={() => setHide((prev) => !prev)}>{hide ? "open" : "close"}</Button>
         </div>

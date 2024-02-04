@@ -1,13 +1,13 @@
 import { Favorite, getFavoritesByUID } from "@/firebase-actions/chatroom/favorites/actions";
 import { database } from "@/firebaseModule";
-import { chatRoomIdState, chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
+import { UserAuthState, chatRoomIdState, chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
 import { onChildAdded, onChildRemoved, ref } from "firebase/database";
 import { useCallback, useEffect, Fragment, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styles from "@styles/Chat/SidePanel/Favorited.module.scss";
 
 export default function Favorited() {
-  const user = useRecoilValue(userAuthState);
+  const user = useRecoilValue<UserAuthState | null>(userAuthState);
   const [favorites, setFavorites] = useState<Favorite[] | null>(null);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
