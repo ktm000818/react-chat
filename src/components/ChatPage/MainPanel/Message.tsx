@@ -1,10 +1,11 @@
 import React, { useEffect, useId, useRef, useState } from "react";
-import { Message, getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
+import { getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
 import styles from "@styles/Chat/MainPanel/Message.module.scss";
 import { onChildAdded, ref } from "firebase/database";
 import { useRecoilValue } from "recoil";
+import { Message } from "@/types";
 
 function Messages() {
   const messageId = useId();

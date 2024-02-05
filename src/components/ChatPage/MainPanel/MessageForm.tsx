@@ -1,9 +1,10 @@
-import { Props, createMessage } from "@/firebase-actions/chatroom/chat/actions";
+import { createMessage } from "@/firebase-actions/chatroom/chat/actions";
 import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { CreateMessage } from "@/types";
 import styles from "@styles/Chat/MainPanel/MessageForm.module.scss";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
+import { useRecoilValue } from "recoil";
 
 function MessageForm() {
   const user = useRecoilValue(userAuthState);
@@ -18,7 +19,7 @@ function MessageForm() {
     if (!content || !user?.uid || !user.displayName || !user.photoURL) {
       return false;
     }
-    const data: Props = {
+    const data: CreateMessage.Props = {
       roomId,
       uid: user.uid,
       content,

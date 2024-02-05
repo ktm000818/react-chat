@@ -1,1 +1,1 @@
-declare const updates: { [key: stirng]: boolean | string };
+declare const updates: { [key: string]: boolean | string };

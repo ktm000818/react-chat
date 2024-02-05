@@ -1,11 +1,11 @@
 import React from "react";
 
-interface ConditionalRender {
+interface Props {
   condition?: boolean;
   children?: React.ReactNode;
 }
 
-export default function ConditionalRender({ condition, children }: ConditionalRender) {
+export default function ConditionalRender({ condition, children }: Props) {
   let nodes = React.Children.toArray(children);
 
   if (condition) {
@@ -15,11 +15,11 @@ export default function ConditionalRender({ condition, children }: ConditionalRe
   }
 }
 
-function When({ children }: ConditionalRender) {
+function When({ children }: Props) {
   return <>{children}</>;
 }
 
-function ElseIf({ children, condition }: ConditionalRender) {
+function ElseIf({ children, condition }: Props) {
   let nodes = React.Children.toArray(children);
 
   if (condition) {
@@ -29,7 +29,7 @@ function ElseIf({ children, condition }: ConditionalRender) {
   }
 }
 
-function Otherwise({ children }: ConditionalRender) {
+function Otherwise({ children }: Props) {
   return <>{children}</>;
 }
 
