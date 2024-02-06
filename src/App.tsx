@@ -9,7 +9,7 @@ import ChatPage from "./components/ChatPage/ChatPage";
 import { useUpdateKey } from "./custom-hooks/useUpdateKey";
 import { UpdateRecoilRootKeyContext } from "./custom-hooks/useUpdateRecoilRootKeyContext";
 import { auth } from "./firebaseModule";
-import { UserAuthState, userAuthState } from "./recoil/recoil-store/store";
+import { userAuthState } from "./recoil/recoil-store/store";
 
 export default function App() {
   const { key, updateKey } = useUpdateKey();
@@ -24,7 +24,7 @@ export default function App() {
 }
 
 const useObserveUserAuth = () => {
-  const setUserAuthState = useSetRecoilState<UserAuthState | null>(userAuthState);
+  const setUserAuthState = useSetRecoilState(userAuthState);
 
   useEffect(() => {
     const unscribe = onAuthStateChanged(auth, (user) => {

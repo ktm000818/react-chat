@@ -1,4 +1,5 @@
 import { database } from "@/firebaseModule";
+import { FavoriteFamily } from "@/types";
 import { child, get, push, ref, remove, set, update } from "firebase/database";
 
 const FAVORITES = "favorites";
@@ -39,8 +40,8 @@ export const removeFavorite: FavoriteRemoveProps = async (uid, roomId) => {
       const favorites = await get(child(dbRef, `${FAVORITES}`));
       const userFavoriteRooms = await get(child(dbRef, `${USER_FAVORITES}/${uid}`));
 
-      const favoritesVal: Favorites = await favorites.val();
-      const userFavoritesVal: Favorites = await userFavoriteRooms.val();
+      const favoritesVal: FavoriteFamily.Favorites = await favorites.val();
+      const userFavoritesVal: FavoriteFamily.Favorites = await userFavoriteRooms.val();
 
       let result: string[] = [];
 
@@ -81,24 +82,14 @@ export const removeFavorite: FavoriteRemoveProps = async (uid, roomId) => {
   await changeIsFavoritePropertieOfChatRoom(uid, roomId, false);
 };
 
-export interface Favorite {
-  uid: string;
-  roomId: string;
-  roomName: string;
-}
-
-interface Favorites {
-  [key: string]: Favorite;
-}
-
-export const getFavoritesByUID: (uid: string | undefined) => Promise<Favorite[] | never[]> = async (uid) => {
+export const getFavoritesByUID: (uid: string | undefined) => Promise<FavoriteFamily.Favorite[] | never[]> = async (uid) => {
   if (!uid) {
     return [];
   }
   try {
     const dbRef = ref(database);
     const result = await get(child(dbRef, `${USER_FAVORITES}/${uid}`));
-    const resultVal: Favorites = await result.val();
+    const resultVal: FavoriteFamily.Favorites = await result.val();
 
     if (result.exists()) {
       return Object.values(resultVal);

@@ -1,14 +1,15 @@
-import { Favorite, getFavoritesByUID } from "@/firebase-actions/chatroom/favorites/actions";
-import { database } from "@/firebaseModule";
-import { UserAuthState, chatRoomIdState, chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
-import { onChildAdded, onChildRemoved, ref } from "firebase/database";
-import { useCallback, useEffect, Fragment, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styles from "@styles/Chat/SidePanel/Favorited.module.scss";
+import { getFavoritesByUID } from "@/firebase-actions/chatroom/favorites/actions";
+import { database } from "@/firebaseModule";
+import { chatRoomIdState, chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
+import { FavoriteFamily } from "@/types";
+import { onChildAdded, onChildRemoved, ref } from "firebase/database";
+import { Fragment, useCallback, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function Favorited() {
-  const user = useRecoilValue<UserAuthState | null>(userAuthState);
-  const [favorites, setFavorites] = useState<Favorite[] | null>(null);
+  const user = useRecoilValue(userAuthState);
+  const [favorites, setFavorites] = useState<FavoriteFamily.Favorite[] | null>(null);
   const [chatRoomId, setChatRoomId] = useRecoilState(chatRoomIdState);
   const setChatRoomInfo = useSetRecoilState(chatRoomInfoState);
 
@@ -18,7 +19,7 @@ export default function Favorited() {
     setFavorites(rooms);
   }, [user]);
 
-  const enterRoom = (room: Favorite) => {
+  const enterRoom = (room: FavoriteFamily.Favorite) => {
     setChatRoomId(room.roomId);
     setChatRoomInfo({
       roomId: room.roomId,
@@ -41,7 +42,7 @@ export default function Favorited() {
         </div>
       )}
       <div className={styles["favorite-container"]}>
-        {(favorites || []).map((room: Favorite, _) => (
+        {(favorites || []).map((room: FavoriteFamily.Favorite, _) => (
           <Fragment key={room.roomId}>
             <div
               style={{

@@ -3,11 +3,10 @@ import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
-interface ChatRoomInfo {
+type ChatRoomInfo = {
   roomId: string;
   roomName: string;
-}
-
+};
 export type UserAuthState = User;
 
 export const userAuthState = atom<UserAuthState | null>({

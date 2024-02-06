@@ -8,6 +8,18 @@ export namespace CreateMessage {
   }
 }
 
+export namespace FavoriteFamily {
+  export interface Favorite {
+    uid: string;
+    roomId: string;
+    roomName: string;
+  }
+
+  export interface Favorites {
+    [key: string]: Favorite;
+  }
+}
+
 export interface Message {
   content: string;
   image: string;
