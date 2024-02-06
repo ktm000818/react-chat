@@ -1,6 +1,6 @@
 import { auth, database } from "@/firebaseModule";
+import { FavoriteFamily } from "@/types";
 import { equalTo, get, orderByChild, query, ref, set, update } from "firebase/database";
-import { Favorite } from "./favorites/actions";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
@@ -25,7 +25,7 @@ interface Members {
   [name: string]: Member;
 }
 
-export interface ChatRoom extends Favorite {
+export interface ChatRoom extends FavoriteFamily.Favorite {
   createdAt: string;
   description: string;
   members: Members;
