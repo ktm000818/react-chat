@@ -45,8 +45,8 @@ export default function Users() {
         <div key={`${member.uid}_${i}`} className={styles["member-card"]}>
           <div className={styles["member-image-wrapper"]}>
             <img src={member.image} alt="" width={35} height={35} />
-            <div className={styles["online-status"]}></div>
           </div>
+          <div className={`${styles["connect-status"]} ${styles["online"]}`}></div>
           <span className={styles["member-name"]}>{member.name}</span>
         </div>
       ))}

@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  position: relative;
   height: 45px;
 
   .member-image-wrapper {
@@ -22,17 +23,24 @@
     height: 30px;
     overflow: hidden;
     border-radius: 100%;
-    position: relative;
+  }
 
-    .online-status {
-      position: absolute;
-      border-radius: 100%;
-      right: 0;
-      bottom: 0;
-      width: 10px;
-      height: 10px;
-      background-color: green;
-      z-index: 99;
+  .connect-status {
+    position: absolute;
+    border-radius: 100%;
+    border: 1px solid rgba(50, 60, 50, 0.231);
+    left: 30px;
+    top: 30px;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(0, 0, 0);
+    z-index: 99;
+
+    &.offline {
+      background-color: rgb(0, 0, 0);
+    }
+    &.online {
+      background-color: rgb(0, 255, 0);
     }
   }
 
