@@ -1,15 +1,9 @@
 import { auth, database } from "@/firebaseModule";
-import { FavoriteFamily } from "@/types";
+import { FavoriteFamily, User } from "@/types";
 import { equalTo, get, orderByChild, query, ref, set, update } from "firebase/database";
 
 const CHATROOM = "chatroom";
 const USER_CHATROOM = "user_chatroom";
-
-interface User {
-  image: string;
-  name: string;
-  uid: string;
-}
 
 export interface AddChatRoom {
   roomName: string;
@@ -21,9 +15,7 @@ interface Member extends User {
   superPermission: boolean;
 }
 
-interface Members {
-  [name: string]: Member;
-}
+type Members = Record<string, Member>;
 
 export interface ChatRoom extends FavoriteFamily.Favorite {
   createdAt: string;
@@ -42,7 +34,11 @@ export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatR
     return [];
   }
   try {
-    const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
+    const queryChatRoomOrderByCreatedAt = query(
+      ref(database, `${USER_CHATROOM}/${uid}`),
+      orderByChild("isFavorite"),
+      equalTo(false)
+    );
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
 
@@ -70,6 +66,7 @@ export const addChatRoom = async ({ user, roomName, description }: AddChatRoom) 
         image: user.image,
         name: user.name,
         superPermission: true,
+        isLogin: user.isLogin,
       },
     },
     roomId: NEW_ROOM_ID,
@@ -101,6 +98,7 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
       name: user.name,
       uid: user.uid,
       superPermission: false,
+      isLogin: user.isLogin,
     };
 
     const copiedUserChatRoominfoForCurrentUser = ({ ...copiedUserChatRoomInfo }.members[user.uid] = newUser);

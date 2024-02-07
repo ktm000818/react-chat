@@ -26,6 +26,7 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
         uid: user.uid,
         name: user.displayName,
         image: user.photoURL,
+        isLogin: true,
       },
     };
     await addChatRoom(data);
@@ -48,7 +49,13 @@ export default function ChatRoomAddingModal({ show, close }: Props) {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" rows={6} type="text" placeholder="description" onChange={({ target }) => setDescription(target.value)} />
+              <Form.Control
+                as="textarea"
+                rows={6}
+                type="text"
+                placeholder="description"
+                onChange={({ target }) => setDescription(target.value)}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>

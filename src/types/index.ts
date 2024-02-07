@@ -31,3 +31,14 @@ export interface Message {
 export interface Messages {
   [name: string]: Message;
 }
+
+export interface User {
+  image: string;
+  isLogin: boolean;
+  name: string;
+  uid: string;
+}
+
+export interface UserList {
+  [key: string]: User;
+}

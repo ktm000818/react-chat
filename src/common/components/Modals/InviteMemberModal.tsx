@@ -1,5 +1,6 @@
 import { inviteUserToChatRoom } from "@/firebase-actions/chatroom/actions";
-import { User, UserList, getUserListExceptChatroomMemberAndCurrUser } from "@/firebase-actions/user/actions";
+import { getUserListExceptChatroomMemberAndCurrUser } from "@/firebase-actions/user/actions";
+import { User, UserList } from "@/types";
 import styles from "@styles/Modal/InviteMemberModal.module.scss";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button, Form, ListGroup, Modal } from "react-bootstrap";
@@ -20,7 +21,8 @@ export default function InviteMemberModal({ open = false, handleCloseModal = () 
     setSelectedUserList(Array.from(memberMapRef.current.values()));
   };
 
-  const initiateUserList: () => Promise<void> = async () => setUserList(await getUserListExceptChatroomMemberAndCurrUser(chatRoomId));
+  const initiateUserList: () => Promise<void> = async () =>
+    setUserList(await getUserListExceptChatroomMemberAndCurrUser(chatRoomId));
 
   const closeModal: () => void = () => {
     handleCloseModal();
