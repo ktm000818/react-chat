@@ -78,13 +78,17 @@ export const inviteUserToChatRoom = async (user: User[], roomId: string) => {
       superPermission: false,
       isLogin: user.isLogin,
     };
+    
+    const copiedUserChatRoominfoForCurrentUser = { ...copiedUserChatRoomInfo };
+    copiedUserChatRoominfoForCurrentUser.members[user.uid] = newUser;
 
-    const copiedUserChatRoominfoForCurrentUser = ({ ...copiedUserChatRoomInfo }.members[user.uid] = newUser);
     const copiedUserChatRoominfoForTarget = { ...copiedUserChatRoomInfo };
     copiedUserChatRoominfoForTarget.isSuper = false;
     copiedUserChatRoominfoForTarget.isFavorite = false;
     copiedUserChatRoominfoForTarget.members[user.uid] = newUser;
-    const copiedChatRoomInfoForUpdate = ({ ...copiedChatRoomInfo }.members[user.uid] = newUser);
+
+    const copiedChatRoomInfoForUpdate = { ...copiedChatRoomInfo };
+    copiedChatRoomInfoForUpdate.members[user.uid] = newUser;
 
     updates[`${CHATROOM}/${roomId}`] = copiedChatRoomInfoForUpdate;
     updates[`${USER_CHATROOM}/${user.uid}/${roomId}`] = copiedUserChatRoominfoForTarget;

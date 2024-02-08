@@ -22,7 +22,7 @@ export default function Users() {
         return [];
       }
     };
-    
+
     const initMemberList = async () => {
       setMemberList(await getMemberList());
     };
@@ -40,7 +40,7 @@ export default function Users() {
           <div className={styles["member-image-wrapper"]}>
             <img src={member.image} alt="" width={35} height={35} />
           </div>
-          <div className={`${styles["connect-status"]} ${styles["online"]}`}></div>
+          <div className={`${styles["connect-status"]} ${member.isLogin ? styles["online"] : styles["offline"]}`}></div>
           <span className={styles["member-name"]}>{member.name}</span>
         </div>
       ))}
