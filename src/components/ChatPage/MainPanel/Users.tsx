@@ -1,5 +1,6 @@
 import { database } from "@/firebaseModule";
 import { chatRoomIdState } from "@/recoil/recoil-store/store";
+import { Member } from "@/types";
 import styles from "@styles/Chat/MainPanel/Users.module.scss";
 import { get, onChildAdded, onChildChanged, onChildRemoved, query, ref } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -7,37 +8,30 @@ import { useRecoilValue } from "recoil";
 
 const CHATROOM = "chatroom";
 
-interface Member {
-  image: string;
-  name: string;
-  superPermission: boolean;
-  uid: string;
-}
-
 export default function Users() {
   const [memberList, setMemberList] = useState<Array<Member>>([]);
   const chatRoomId = useRecoilValue(chatRoomIdState);
 
   useEffect(() => {
+    const getMemberList: () => Promise<Array<never>> | Promise<Array<Member>> = async () => {
+      const memberListObj = await get(query(ref(database, `${CHATROOM}/${chatRoomId}/members`)));
+
+      if (memberListObj.exists()) {
+        return Object.values(memberListObj.val());
+      } else {
+        return [];
+      }
+    };
+    
+    const initMemberList = async () => {
+      setMemberList(await getMemberList());
+    };
+
     initMemberList();
     onChildAdded(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
     onChildRemoved(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
     onChildChanged(ref(database, `${CHATROOM}/${chatRoomId}/members`), initMemberList);
   }, [chatRoomId]);
-
-  const initMemberList = async () => {
-    setMemberList(await getMemberList());
-  };
-
-  const getMemberList: () => Promise<Array<never>> | Promise<Array<Member>> = async () => {
-    const memberListObj = await get(query(ref(database, `${CHATROOM}/${chatRoomId}/members`)));
-
-    if (memberListObj.exists()) {
-      return Object.values(memberListObj.val());
-    } else {
-      return [];
-    }
-  };
 
   return (
     <div className={styles["container"]}>

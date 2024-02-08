@@ -1,6 +1,5 @@
-import { createMessage } from "@/firebase-actions/chatroom/chat/actions";
+import { CreateMessageProps, createMessage } from "@/firebase-actions/chatroom/chat/actions";
 import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
-import { CreateMessage } from "@/types";
 import styles from "@styles/Chat/MainPanel/MessageForm.module.scss";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
@@ -19,7 +18,7 @@ function MessageForm() {
     if (!content || !user?.uid || !user.displayName || !user.photoURL) {
       return false;
     }
-    const data: CreateMessage.Props = {
+    const data: CreateMessageProps = {
       roomId,
       uid: user.uid,
       content,

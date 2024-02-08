@@ -1,5 +1,5 @@
 import { auth, database } from "@/firebaseModule";
-import { FavoriteFamily, User } from "@/types";
+import { ChatRoom, ChatRoomList, User } from "@/types";
 import { equalTo, get, orderByChild, query, ref, set, update } from "firebase/database";
 
 const CHATROOM = "chatroom";
@@ -11,34 +11,12 @@ export interface AddChatRoom {
   user: User;
 }
 
-interface Member extends User {
-  superPermission: boolean;
-}
-
-type Members = Record<string, Member>;
-
-export interface ChatRoom extends FavoriteFamily.Favorite {
-  createdAt: string;
-  description: string;
-  members: Members;
-  roomId: string;
-  roomName: string;
-}
-
-interface ChatRoomList {
-  [name: string]: ChatRoom;
-}
-
 export const getAllChatRoomListByUID: (uid: string | undefined) => Promise<ChatRoom[]> = async (uid) => {
   if (!uid) {
     return [];
   }
   try {
-    const queryChatRoomOrderByCreatedAt = query(
-      ref(database, `${USER_CHATROOM}/${uid}`),
-      orderByChild("isFavorite"),
-      equalTo(false)
-    );
+    const queryChatRoomOrderByCreatedAt = query(ref(database, `${USER_CHATROOM}/${uid}`), orderByChild("isFavorite"), equalTo(false));
     const QueriedChatRoomList = await get(queryChatRoomOrderByCreatedAt);
     const chatRoomListVal: ChatRoomList = await QueriedChatRoomList.val();
 

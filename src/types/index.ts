@@ -1,44 +1,47 @@
-export namespace CreateMessage {
-  export interface Props {
-    roomId: string;
-    uid: string;
-    name: string;
-    content: string;
-    image: string;
-  }
-}
+export type Uid = {
+  uid: string;
+};
 
-export namespace FavoriteFamily {
-  export interface Favorite {
-    uid: string;
-    roomId: string;
-    roomName: string;
-  }
+export type Room = {
+  roomId: string;
+  roomName: string;
+};
 
-  export interface Favorites {
-    [key: string]: Favorite;
-  }
-}
-
-export interface Message {
-  content: string;
+export type Image = {
   image: string;
+};
+
+export type Message = Image & Uid & {
+  content: string;
   name: string;
   timestamp: string;
-  uid: string;
-}
+};
 
-export interface Messages {
-  [name: string]: Message;
-}
+export type Messages = Record<string, Message>;
 
-export interface User {
+/** Favorite */
+export namespace FavoriteFamily {
+  export type Favorite = Uid & Room;
+  export type Favorites = Record<string, Favorite>;
+};
+
+/** User */
+export type User = {
   image: string;
   isLogin: boolean;
   name: string;
   uid: string;
-}
+};
+export type UserList = Record<string, User>;
 
-export interface UserList {
-  [key: string]: User;
+/** Member */
+export type Member = User & { superPermission: boolean };
+export type Members = Record<string, Member>;
+
+/** Chatroom */
+export type ChatRoom = Uid & Room & {
+  createdAt: string;
+  description: string;
+  members: Members;
 }
+export type ChatRoomList = Record<string, ChatRoom>;

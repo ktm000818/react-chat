@@ -1,10 +1,17 @@
 import { database } from "@/firebaseModule";
-import { CreateMessage, Message, Messages } from "@/types";
+import { Message, Messages, Room, Uid } from "@/types";
 import { child, get, push, ref, set } from "firebase/database";
 
 const CHAT = "chat";
 
-export const createMessage = async ({ roomId, uid, name, content, image }: CreateMessage.Props) => {
+export type CreateMessageProps = Omit<Uid & Omit<Room, 'roomName'> & {
+  name: string;
+  content: string;
+  image: string;
+  timestamp: string;
+}, 'timestamp'>;
+
+export const createMessage = async ({ roomId, uid, name, content, image }: CreateMessageProps) => {
   const currentTime = new Date().toUTCString();
   const chatRoomRef = ref(database, `${CHAT}/${roomId}`);
   const newChatRef = push(chatRoomRef);

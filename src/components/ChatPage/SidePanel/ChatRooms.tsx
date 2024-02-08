@@ -1,11 +1,12 @@
 import ChatRoomModalOpenButton from "@/common/components/Buttons/ChatRoomAddingModalOpenButton";
-import { ChatRoom, getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
+import { getAllChatRoomListByUID } from "@/firebase-actions/chatroom/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, chatRoomInfoState, userAuthState } from "@/recoil/recoil-store/store";
 import { onChildAdded, onChildChanged, onChildRemoved, ref } from "@firebase/database";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styles from "@styles/Chat/SidePanel/ChatRooms.module.scss";
+import { ChatRoom } from "@/types";
 
 export default function ChatRooms() {
   const user = useRecoilValue(userAuthState);

@@ -6,12 +6,12 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-interface NicknameModifyModal {
+interface Props {
   show: boolean;
   close: () => void;
 }
 
-export default function NicknameModifyModal({ show, close }: NicknameModifyModal) {
+export default function NicknameModifyModal({ show, close }: Props) {
   const session = useRecoilValue(userAuthState);
   const [userAuth, setUserAuth] = useRecoilState(userAuthState);
   const [nickname, setNickname] = useState<string>("");
