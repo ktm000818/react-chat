@@ -1,10 +1,10 @@
 import { database } from "@/firebaseModule";
-import { Message, Messages, Room, Uid } from "@/types";
+import { Message, Messages, RoomSummary, Uid } from "@/types";
 import { child, get, push, ref, set } from "firebase/database";
 
 const CHAT = "chat";
 
-export type CreateMessageProps = Omit<Uid & Omit<Room, 'roomName'> & {
+export type CreateMessageProps = Omit<Uid & Omit<RoomSummary, 'roomName'> & {
   name: string;
   content: string;
   image: string;
