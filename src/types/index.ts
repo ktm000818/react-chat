@@ -6,7 +6,7 @@ export type RoomId = string;
 
 /** Room */
 export type RoomSummary = { roomId: string; roomName: string };
-type RoomDetail = { createdAt: number; description: string; members: Members };
+export type RoomDetail = { createdAt: number; description: string; members: Members, updatedAt: number };
 export type ChatRoom = RoomSummary & RoomDetail;
 export type ChatRoomList = Record<RoomId, ChatRoom>;
 export type UserChatRoom = RoomSummary & RoomDetail & { isFavorite: boolean; isSuper: boolean };
@@ -23,9 +23,12 @@ export namespace FavoriteFamily {
 }
 
 /** User */
-export type User = { image: string; isLogin: boolean; name: string; uid: string };
+export type User = { image: string; isLogin?: boolean; name: string; uid: string };
 export type UserList = Record<IndexedUid, User>;
 
 /** Member */
 export type Member = User & { superPermission: boolean };
 export type Members = Record<IndexedUid, Member>;
+
+type Update = string | boolean;
+export type Updates = Record<string, Update>;
