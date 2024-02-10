@@ -5,6 +5,6 @@ https://react-chat-five-mauve.vercel.app/
 
 MAIN STACK
 -----
-HTML, CSS, Javascript, TypeScript, react, recoil, firebase(rtdb, storage), sass, ts-md5, bootstrap v5
+HTML, CSS, Javascript, TypeScript, react, recoil, firebase(rtdb, storage), sass, bootstrap v5
 <br/>
 <hr/>
