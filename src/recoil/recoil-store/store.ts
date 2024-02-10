@@ -7,9 +7,9 @@ type ChatRoomInfo = {
   roomId: string;
   roomName: string;
 };
-export type UserAuthState = User;
+export type UserAuthState = User | null;
 
-export const userAuthState = atom<UserAuthState | null>({
+export const userAuthState = atom<UserAuthState>({
   key: "userAuthState",
   default: null,
   effects: [persistAtom],

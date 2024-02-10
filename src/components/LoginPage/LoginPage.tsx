@@ -1,6 +1,7 @@
 import useLoginCheck from "@/custom-hooks/useLoginCheck";
 import { auth, database } from "@/firebaseModule";
-import { ref, update } from "@firebase/database";
+import { Updates } from "@/types";
+import { DataSnapshot, get, query, ref, update } from "@firebase/database";
 import styles from "@styles/auth.module.scss";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
@@ -13,6 +14,8 @@ interface FormValues {
   password: string;
 }
 
+const CHATROOM = "chatroom";
+
 export default function Page() {
   useLoginCheck();
   const navigate = useNavigate();
@@ -23,13 +26,24 @@ export default function Page() {
     formState: { errors },
   } = useForm<FormValues>();
 
+  //TODO 로직 분리 필요함
   const updateUserLoginState = async (uid: string) => {
     const dbRef = ref(database);
-    const updates: any = {};
-    updates[`users/${uid}/isLogin`] = true;
-    updates[`users/${uid}/isLogin`] = true;
-    updates[`users/${uid}/isLogin`] = true;
-    updates[`users/${uid}/isLogin`] = true;
+    const updates: Updates = {};
+    const rooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}`)));
+    if (rooms.exists()) {
+      await new Promise((resolve, reject) => {
+        (Object.keys(rooms.val()) || []).forEach(async (roomId) => {
+          const joinedRooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}/${roomId}/members/${uid}`)));
+          if (joinedRooms.exists()) {
+            updates[`${CHATROOM}/${roomId}/members/${uid}/isLogin`] = true;
+            resolve(null);
+          } else {
+            reject(null);
+          }
+        });
+      });
+    }
     updates[`users/${uid}/isLogin`] = true;
     await update(dbRef, updates);
   };

@@ -1,5 +1,5 @@
 import { database } from "@/firebaseModule";
-import { chatRoomIdState } from "@/recoil/recoil-store/store";
+import { UserAuthState, chatRoomIdState } from "@/recoil/recoil-store/store";
 import { Member, Members } from "@/types";
 import styles from "@styles/Chat/MainPanel/Users.module.scss";
 import { get, onChildAdded, onChildChanged, onChildRemoved, query, ref } from "firebase/database";

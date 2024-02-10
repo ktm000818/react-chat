@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { getAllMessageList } from "@/firebase-actions/chatroom/chat/actions";
 import { database } from "@/firebaseModule";
 import { chatRoomIdState, userAuthState } from "@/recoil/recoil-store/store";
@@ -27,10 +27,10 @@ function Messages() {
     }
   };
 
-  async function initMessages() {
+  const initMessages = useCallback(async () => {
     const res = await getAllMessageList(roomId);
     setChatList(res);
-  }
+  }, [roomId]);
 
   const moveScrollBottom = () => {
     const chatArea = containerRef.current as HTMLDivElement;
@@ -40,14 +40,14 @@ function Messages() {
   useEffect(() => {
     if (!user) return;
     initMessages();
-  }, [roomId]);
+  }, [roomId, user, initMessages]);
 
   useEffect(() => {
     const messagesRef = ref(database, "chat/" + roomId);
     onChildAdded(messagesRef, () => {
       initMessages();
     });
-  }, [roomId]);
+  }, [roomId, initMessages]);
 
   useEffect(() => {
     if (!checkIsScrollBottom()) {
