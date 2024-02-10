@@ -15,18 +15,21 @@ function MessageForm() {
   };
 
   const addMessage = () => {
-    if (!content || !user?.uid || !user.displayName || !user.photoURL) {
-      return false;
+    try {
+      if (user?.uid && user.displayName && user.photoURL) {
+        const data: CreateMessageProps = {
+          roomId,
+          uid: user.uid,
+          content,
+          name: user.displayName,
+          image: user.photoURL,
+        };
+        setContent("");
+        createMessage(data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-    const data: CreateMessageProps = {
-      roomId,
-      uid: user.uid,
-      content,
-      name: user.displayName,
-      image: user.photoURL,
-    };
-    setContent("");
-    createMessage(data);
   };
 
   const handleClickButton = () => {

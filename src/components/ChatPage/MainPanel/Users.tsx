@@ -1,6 +1,6 @@
 import { database } from "@/firebaseModule";
 import { chatRoomIdState } from "@/recoil/recoil-store/store";
-import { Member } from "@/types";
+import { Member, Members } from "@/types";
 import styles from "@styles/Chat/MainPanel/Users.module.scss";
 import { get, onChildAdded, onChildChanged, onChildRemoved, query, ref } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -13,11 +13,12 @@ export default function Users() {
   const chatRoomId = useRecoilValue(chatRoomIdState);
 
   useEffect(() => {
-    const getMemberList: () => Promise<Array<never>> | Promise<Array<Member>> = async () => {
+    type GetMemberList = () => Promise<Array<never>> | Promise<Array<Member>>;
+    const getMemberList: GetMemberList = async () => {
       const memberListObj = await get(query(ref(database, `${CHATROOM}/${chatRoomId}/members`)));
 
       if (memberListObj.exists()) {
-        return Object.values(memberListObj.val());
+        return Object.values(memberListObj.val() as Members);
       } else {
         return [];
       }

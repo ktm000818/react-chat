@@ -1,7 +1,8 @@
 import { auth, database } from "@/firebaseModule";
 import { userAuthState } from "@/recoil/recoil-store/store";
+import { UserChatRoomList } from "@/types";
 import { updateProfile } from "firebase/auth";
-import { child, get, ref, update } from "firebase/database";
+import { DataSnapshot, child, get, ref, update } from "firebase/database";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -27,10 +28,10 @@ export default function NicknameModifyModal({ show, close }: Props) {
     if (!userAuth) return;
 
     const dbRef = ref(database);
-    const userChatRooms = await get(child(dbRef, `user_chatroom/${uid}`));
+    const userChatRooms: UserChatRoomList = (await get(child(dbRef, `user_chatroom/${uid}`))).val();
 
     const updates: any = {};
-    for (let roomKey in userChatRooms.val()) {
+    for (let roomKey in userChatRooms) {
       updates[`user_chatroom/${uid}/${roomKey}/members/${uid}/name`] = nickname;
       updates[`chatroom/${roomKey}/members/${uid}/name`] = nickname;
     }
