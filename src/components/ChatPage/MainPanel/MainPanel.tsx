@@ -17,20 +17,20 @@ const Body = () => (
   </>
 );
 
-const HOCBody = withChatRoomInfoComponent(Body, () => (
-  <div className={styles["no-room-body"]}>방을 생성하거나 참여해주세요!</div>
-));
+const HOCBody = withChatRoomInfoComponent(Body, () => <div className={styles["no-room-body"]}>방을 생성하거나 참여해주세요!</div>);
 
 function MainPanel() {
   return (
-    <div className={styles["container"]}>
-      <div className={styles["header"]}>
-        <MessagesHeader />
+    <>
+      <div className={styles["container"]}>
+        <div className={styles["header"]}>
+          <MessagesHeader />
+        </div>
+        <div className={styles["body"]}>
+          <HOCBody />
+        </div>
       </div>
-      <div className={styles["body"]}>
-        <HOCBody />
-      </div>
-    </div>
+    </>
   );
 }
 
