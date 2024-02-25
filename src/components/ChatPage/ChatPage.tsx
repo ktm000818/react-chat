@@ -7,15 +7,11 @@ import { Button } from "react-bootstrap";
 
 export default function ChatPage() {
   useLoginCheck();
-  const [hide, setHide] = useState(false);
 
   return (
     <div className={styles["container"]}>
-      <div className={`${styles["side-wrapper"]} ${hide ? styles["hide"] : styles[""]}`}>
-        <div className={styles["nav"]}>
-          <Button onClick={() => setHide((prev) => !prev)}>{hide ? "open" : "close"}</Button>
-        </div>
-        {!hide && <SidePanel />}
+      <div className={`${styles["side-wrapper"]}`}>
+      <SidePanel />
       </div>
       <div className={styles["main-wrapper"]}>
         <MainPanel />
