@@ -3,10 +3,11 @@
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   .custom-input-wrapper {
     display: flex;
-    width: 80%;
+    width: 50%;
 
     .custom-input {
       background-color: rgba(0, 0, 0, 0.586) !important;

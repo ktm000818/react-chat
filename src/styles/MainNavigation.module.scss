@@ -1,4 +1,5 @@
 .container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,4 +8,24 @@
 
 .nickname {
   margin: 20px;
+}
+
+@import "./Environment/Environment.scss";
+
+@include mobile {
+  .container {
+    justify-content: space-between;
+  }
+}
+
+@include tablet {
+  .container {
+    justify-content: end;
+  }
+}
+
+@include desktop {
+  .container {
+    justify-content: end;
+  }
 }
