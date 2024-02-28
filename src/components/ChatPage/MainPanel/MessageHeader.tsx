@@ -12,21 +12,7 @@ function MessagesHeader() {
   const user = useRecoilValue(userAuthState);
   const chatRoomInfo = useRecoilValue(chatRoomInfoState);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [hide, setHide] = useState(false);
-  let sidePanelRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleMenu: () => void = () => {
-    setHide((hide) => {
-      if (sidePanelRef.current) {
-        if (hide) {
-          sidePanelRef.current.style.display = "unset";
-        } else {
-          sidePanelRef.current.style.display = "none";
-        }
-      }
-      return !hide;
-    });
-  };
   const getAndSetIsFavoriteRoom = useCallback(async () => {
     if (!user?.uid) {
       return;
@@ -54,13 +40,8 @@ function MessagesHeader() {
 
   return (
     <>
-      <div ref={sidePanelRef} className={`${styles["side-wrapper"]}`}>
-        <SidePanel />
-      </div>
+      <SidePanel />
       <div className={styles["container"]}>
-        <div className={styles["menu-button"]} onClick={toggleMenu}>
-          {hide ? "=" : "x"}
-        </div>
         <div className={styles["title-wrapper"]}>
           {chatRoomInfo.roomId && (
             <>
