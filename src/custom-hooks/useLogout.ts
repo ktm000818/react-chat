@@ -22,18 +22,23 @@ export function useLogout() {
     const dbRef = ref(database);
     const updates: Updates = {};
     const rooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}`)));
-    if (rooms.exists()) {
-      await new Promise((resolve, reject) => {
+
+    const updateUserLoginState = (rooms: DataSnapshot) => {
+      return new Promise((resolve, reject) => {
         (Object.keys(rooms.val()) || []).forEach(async (roomId) => {
           const joinedRooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}/${roomId}/members/${user.uid}`)));
           if (joinedRooms.exists()) {
             updates[`${CHATROOM}/${roomId}/members/${user.uid}/isLogin`] = false;
             resolve(null);
           } else {
-            reject(null);
+            reject(new Error('logout error!'));
           }
         });
       });
+    }
+
+    if (rooms.exists()) {
+      await updateUserLoginState(rooms);
     }
     updates[`users/${user.uid}/isLogin`] = false;
     await update(dbRef, updates);

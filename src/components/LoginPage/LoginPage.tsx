@@ -31,18 +31,23 @@ export default function Page() {
     const dbRef = ref(database);
     const updates: Updates = {};
     const rooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}`)));
-    if (rooms.exists()) {
-      await new Promise((resolve, reject) => {
+
+    const changeUserLoginState = (rooms: DataSnapshot) => {
+      return new Promise((resolve, reject) => {
         (Object.keys(rooms.val()) || []).forEach(async (roomId) => {
           const joinedRooms: DataSnapshot = await get(query(ref(database, `${CHATROOM}/${roomId}/members/${uid}`)));
           if (joinedRooms.exists()) {
             updates[`${CHATROOM}/${roomId}/members/${uid}/isLogin`] = true;
             resolve(null);
           } else {
-            reject(null);
+            reject(new Error('login error!'));
           }
         });
       });
+    }
+
+    if (rooms.exists()) {
+      await changeUserLoginState(rooms);
     }
     updates[`users/${uid}/isLogin`] = true;
     await update(dbRef, updates);
