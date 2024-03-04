@@ -3,7 +3,6 @@
 .container {
   min-width: 200px;
   max-width: 200px;
-  border: 1px solid rgba(0, 0, 0, 0.426);
   height: 100%;
 }
 
@@ -49,16 +48,4 @@
     font-weight: 400;
     color: whitesmoke;
   }
-}
-
-@include mobile {
-  .container {
-    display: none;
-  }
-}
-
-@include tablet {
-}
-
-@include desktop {
 }

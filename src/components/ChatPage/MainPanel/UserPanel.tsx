@@ -6,6 +6,7 @@ import styles from "@styles/Chat/MainPanel/UserPanel.module.scss";
 import { ChangeEvent, ForwardedRef, MouseEventHandler, RefObject, forwardRef, useRef, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useRecoilState, useRecoilValue } from "recoil";
+import Users from "./Users";
 
 export default function UserPanel() {
   const fileUploaderRef = useRef<HTMLInputElement>(null);
@@ -13,12 +14,31 @@ export default function UserPanel() {
     <>
       <ProfilePictureFileUploader ref={fileUploaderRef} />
       <div className={styles["container"]}>
+        <UserListButton />
         <UserImageWithDropdown fileUploaderRef={fileUploaderRef} />
         <NicknameWithDropdown />
       </div>
     </>
   );
 }
+
+const UserListButton = () => {
+  const [hide, setHide] = useState(true);
+  return (
+    <>
+      <div className={styles["user-list-container"]}>
+        <div className={styles["user-list-button"]} onClick={() => setHide((prev) => !prev)}>
+          <img src="icon/person.png" alt="memberList" width={30}/>
+        </div>
+        {!hide && (
+          <div className={styles["user-list"]}>
+            <Users />
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
 
 const ProfilePictureFileUploader = forwardRef((_, ref: ForwardedRef<HTMLInputElement>) => {
   const [userAuth, setUserAuthState] = useRecoilState(userAuthState);

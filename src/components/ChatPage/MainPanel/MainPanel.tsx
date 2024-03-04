@@ -8,8 +8,12 @@ import Users from "./Users";
 const Body = () => (
   <>
     <div className={styles["message-with-users-wrapper"]}>
-      <Messages />
-      <Users />
+      <div className={styles["messages-wrapper"]}>
+        <Messages />
+      </div>
+      <div className={styles["users-wrapper"]}>
+        <Users />
+      </div>
     </div>
     <div className={styles["message-form-wrapper"]}>
       <MessageForm />

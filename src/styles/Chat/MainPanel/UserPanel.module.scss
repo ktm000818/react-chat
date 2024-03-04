@@ -30,3 +30,47 @@
   border-radius: 50px;
   overflow: hidden;
 }
+
+.user-list-container {
+  margin-right: 10px;
+  position: relative;
+  .user-list-button {
+    position: relative;
+    cursor: pointer;
+  }
+  .user-list {
+    position: absolute;
+    z-index: 1;
+    top: 40px;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    overflow-y: scroll;
+    background-color: rgb(33, 33, 33);
+    box-shadow: 1px 2px 0px black;
+  }
+}
+
+.file-input {
+  display: none;
+}
+
+@import "../../Environment/Environment.scss";
+
+@include mobile {
+  .user-list-container {
+    display: unset;
+  }
+}
+
+@include tablet {
+  .user-list-container {
+    display: none;
+  }
+}
+
+@include desktop {
+  .user-list-container {
+    display: none;
+  }
+}
