@@ -15,6 +15,7 @@ export default function Users() {
   useEffect(() => {
     type GetMemberList = () => Promise<Array<never>> | Promise<Array<Member>>;
     const getMemberList: GetMemberList = async () => {
+      //TODO 유저리스트 정렬
       const memberListObj = await get(query(ref(database, `${CHATROOM}/${chatRoomId}/members`)));
 
       if (memberListObj.exists()) {
