@@ -15,27 +15,27 @@
   color: black;
   height: calc(100% - 60px);
   background-color: rgb(43, 43, 43);
-}
 
-.message-with-users-wrapper {
-  height: 90%;
-  display: flex;
+  .message-with-users-wrapper {
+    height: 90%;
+    display: flex;
 
-  .messages-wrapper {
-    width: 100%;
-    height: 100%;
+    .messages-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .users-wrapper {
+      min-width: 200px;
+      max-width: 200px;
+      border: 1px solid rgba(0, 0, 0, 0.426);
+      height: 100%;
+    }
+
+    .message-form-wrapper {
+      height: 10%;
+    }
   }
-
-  .users-wrapper {
-    min-width: 200px;
-    max-width: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.426);
-    height: 100%;
-  }
-}
-
-.message-form-wrapper {
-  height: 10%;
 }
 
 .no-room-body {
