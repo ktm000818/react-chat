@@ -33,7 +33,6 @@ function MainPanel() {
         <div className={styles["body"]}>
           <HOCBody />
         </div>
-        <div style={{ position: "absolute", width: "1px", height: "calc(100% + 1px)" }}></div>
       </div>
     </>
   );
