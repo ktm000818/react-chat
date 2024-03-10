@@ -10,7 +10,6 @@ export default function ChatPage() {
   return (
     <div className={styles["container"]}>
       <MainPanel />
-      <div style={{ position: "absolute", left: 0, top: 0, width: "1px", height: "calc(100% + 1px)" }}></div>
     </div>
   );
 }
