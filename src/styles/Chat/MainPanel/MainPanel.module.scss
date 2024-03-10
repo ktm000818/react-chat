@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  height: 100svh;
+  height: 100vh;
 }
 
 .header {
@@ -45,7 +45,7 @@
   color: whitesmoke;
 }
 
-@import "../../Environment/Environment.scss";
+@import '../../Environment/Environment.scss';
 
 @include mobile {
   .users-wrapper {
@@ -64,3 +64,4 @@
     display: unset;
   }
 }
+
